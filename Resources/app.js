@@ -37,7 +37,7 @@ pspdfkit.setLogLevel(4);
 pspdfkit.setLanguageDictionary({
 	"en" : {
 		// general
-		"Table Of Contents" : "Outline",
+		"Table of Contents" : "Outline",
 		"Go to %@" : "%@",
 	},
 	"de" : {
