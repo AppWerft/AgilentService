@@ -1,10 +1,7 @@
 exports.get = function(_url, _callback) {
-	
 	var parts = _url.split('/');
 	var pspdfkit = require('com.pspdfkit');
 	var fileName = parts[parts.length-1];
-	//Ti.Utils.md5HexDigest(_url);
-	console.log(fileName);
 	var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, fileName);
 	if (!f.exists()) {
 		var xhr = Titanium.Network.createHTTPClient({
