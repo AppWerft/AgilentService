@@ -1,8 +1,8 @@
 exports.create = function(pdf) {
 	var self = Ti.UI.createView({
 		width : 150,
-		top : 10,
-		left : 10,
+		top : 30,
+		left : 30,
 		url : pdf.url,
 		height : 150
 	});

@@ -17,12 +17,13 @@
     <analytics>true</analytics>
     <guid>6115226d-0671-4324-b9b7-1e2ac379b756</guid>
     <property name="ti.ui.defaultunit" type="string">system</property>
+    <property name="lectionsurl" type="string">http://lab.min.uni-hamburg.de/pdf/lections.js</property>
     <iphone>
         <orientations device="iphone">
             <orientation>Ti.UI.PORTRAIT</orientation>
         </orientations>
         <orientations device="ipad">
-             <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
+            <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
             <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
         </orientations>
     </iphone>
@@ -34,7 +35,7 @@
         <target device="blackberry">false</target>
         <target device="android">false</target>
         <target device="ipad">true</target>
-        <target device="iphone">false</target>
+        <target device="iphone">true</target>
         <target device="mobileweb">false</target>
         <target device="tizen">false</target>
     </deployment-targets>

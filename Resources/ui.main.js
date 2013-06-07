@@ -1,9 +1,28 @@
 exports.create = function() {
 	var pspdfkit = require('com.pspdfkit');
+	function updateList() {
+		require('module/pdf.model').getlist(function(_lections) {
+			masterview.removeAllChildren();
+			for (var i = 0; i < _lections.length; i++) {
+				_lections[i].title = 'Dokument №' + (i + 1);
+				masterview.add(require('module/pdfpreview').create(_lections[i]));
+			}
+		});
+	}
+
+	var renew = Ti.UI.createButton({
+		title : 'Reload'
+	});
+	renew.addEventListener('click', updateList);
 	var masterwindow = Ti.UI.createWindow({
 		backgroundImage : '/assets/bg.jpg',
+		title : 'Lektionen@AgilentService',
+		rightNavButton : renew,
+		barColor : '#000'
 	});
-	masterwindow.open();
+	var navGroup = Ti.UI.iPhone.createNavigationGroup({
+		window : masterwindow,
+	});
 	var masterview = Ti.UI.createScrollView({
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
@@ -12,31 +31,18 @@ exports.create = function() {
 		contentHeight : Ti.UI.SIZE,
 	});
 	masterwindow.add(masterview);
-	var mans = [{
-		url : 'http://lab.min.uni-hamburg.de/pdf/BrownTreeCutter.pdf‎'
-	}, {
-		url : 'http://www.enough.de/fileadmin/uploads/dev_guide_pdfs/Guide_11thEdition_WEB-1.pdf'
-	}, {
-		url : 'http://www.davidgilmour.com/freedom/AGreatDayForFreedom_LITE.pdf'
-	}, {
-		url : 'http://lab.min.uni-hamburg.de/pdf/PSPDFKit.pdf'
-	}, {
-		url : 'http://lab.min.uni-hamburg.de/pdf/1.pdf'
-	}, {
-		url : 'http://lab.min.uni-hamburg.de/pdf/2.pdf'
-	}, {
-		url : 'http://lab.min.uni-hamburg.de/pdf/Economic Development: Bibb County.pdf'
-	}];
 
-	for (var i = 0; i < mans.length; i++) {
-		mans[i].title = 'Dokument №' + (i + 1);
-		masterview.add(require('module/pdfpreview').create(mans[i]));
-	}
+	updateList();
 	masterview.addEventListener('click', function(_e) {
 		var item = (_e.source.url) ? _e.source : _e.source.parent;
+		if (!item.url)
+			return;
 		var url = item.url;
 		require('module/pdf.model').get(url, function(_pdf) {
 			pspdfkit.showPDFAnimated(_pdf.pdfpath);
 		});
 	});
+	var main = Ti.UI.createWindow();
+	main.add(navGroup);
+	main.open();
 }
