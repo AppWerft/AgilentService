@@ -22,9 +22,7 @@
             <orientation>Ti.UI.PORTRAIT</orientation>
         </orientations>
         <orientations device="ipad">
-            <orientation>Ti.UI.PORTRAIT</orientation>
-            <orientation>Ti.UI.UPSIDE_PORTRAIT</orientation>
-            <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
+             <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
             <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
         </orientations>
     </iphone>
@@ -36,12 +34,12 @@
         <target device="blackberry">false</target>
         <target device="android">false</target>
         <target device="ipad">true</target>
-        <target device="iphone">true</target>
+        <target device="iphone">false</target>
         <target device="mobileweb">false</target>
         <target device="tizen">false</target>
     </deployment-targets>
-    <sdk-version>3.1.0.GA</sdk-version>
+    <sdk-version>3.2.0.v20130530200055</sdk-version>
     <ios>
-		<min-ios-ver>5.0</min-ios-ver>
-	</ios>
+        <min-ios-ver>5.0</min-ios-ver>
+    </ios>
 </ti:app>

@@ -1,9 +1,9 @@
-#appname: AgilentService
-#appid: de.appwerft.agilent
-#type: mobile
-#guid: 6115226d-0671-4324-b9b7-1e2ac379b756
-#version: 1.0
-#publisher: not specified
-#url: not specified
-#image: appicon.png
-#desc: not specified
+#appname:AgilentService
+#appid:de.appwerft.agilent
+#type:ipad
+#guid:6115226d-0671-4324-b9b7-1e2ac379b756
+#version:1.0
+#publisher:rainerschleevoigt
+#url:http://
+#image:appicon.png
+#desc:not specified
