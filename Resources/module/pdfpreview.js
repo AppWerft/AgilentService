@@ -1,10 +1,10 @@
 exports.create = function(pdf) {
 	var self = Ti.UI.createView({
-		width : 150,
-		top : 30,
-		left : 30,
+		width : 140,
+		top : 20,
+		left : 20,
 		url : pdf.url,
-		height : 150
+		height : 140
 	});
 	self.preview = Ti.UI.createImageView({
 		width : 130,

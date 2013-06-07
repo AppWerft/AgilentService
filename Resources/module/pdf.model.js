@@ -5,7 +5,7 @@ exports.getlist = function(_callback) {
 		onload : function() {
 			_callback(JSON.parse(this.responseText));
 		},
-		timeout : 55000
+		timeout : 120000
 	});
 	xhr.open('GET', url);
 	xhr.send(null);
