@@ -3,7 +3,7 @@ exports.get = function(_url, _callback) {
 	var pspdfkit = require('com.pspdfkit');
 	var fileName = parts[parts.length - 1];
 	var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, fileName);
-	if (!f.exists()) {
+	if (!f.exists()) { 
 		var xhr = Titanium.Network.createHTTPClient({
 			onload : function() {
 				_callback({
@@ -22,7 +22,6 @@ exports.get = function(_url, _callback) {
 			preview : pspdfkit.imageForDocument(f.nativePath, 0, 1)
 		});
 	}
-
 }
 
 
