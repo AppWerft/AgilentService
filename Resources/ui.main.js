@@ -10,10 +10,10 @@ exports.create = function() {
 		});
 	}
 
-	var renew = Ti.UI.createButton({
+	var actionbutton = Ti.UI.createButton({
 		title : 'Mehr …'
 	});
-	renew.addEventListener('click', updateList);
+	actionbutton.addEventListener('click', updateList);
 	var opts = {
 		cancel : 2,
 		options : ['Lektionen nachladen', 'Lektionen löschen', 'Videokonferenz', 'Abbruch'],
@@ -21,16 +21,29 @@ exports.create = function() {
 		destructive : 1,
 		title : 'Optionen'
 	};
-	renew.addEventListener('click', function(e) {
-		var dialog = Ti.UI.createOptionDialog(opts).show({
-			view : renew
+	actionbutton.addEventListener('click', function() {
+		var dialog = Ti.UI.createOptionDialog(opts);
+		dialog.show({
+			view : actionbutton
+		});
+		dialog.addEventListener('click', function(_e) {
+			switch (_e.index) {
+				case 0:
+					updateList()
+					break;
+				case 1:
+					break;
+				case 2:
+					require('module/opentok').create(actionbutton);
+					break;
+			}
 		});
 	});
 
 	var masterwindow = Ti.UI.createWindow({
 		backgroundImage : '/assets/bg.jpg',
 		title : 'Lektionen@AgilentService',
-		rightNavButton : renew,
+		rightNavButton : actionbutton,
 		barColor : '#000'
 	});
 	var navGroup = Ti.UI.iPhone.createNavigationGroup({
@@ -55,6 +68,9 @@ exports.create = function() {
 			pspdfkit.showPDFAnimated(_pdf.pdfpath);
 		});
 	});
+	/* */
+
+	/*   */
 	var main = Ti.UI.createWindow();
 	main.add(navGroup);
 	main.open();
