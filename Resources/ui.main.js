@@ -11,9 +11,22 @@ exports.create = function() {
 	}
 
 	var renew = Ti.UI.createButton({
-		title : 'Reload'
+		title : 'Mehr …'
 	});
 	renew.addEventListener('click', updateList);
+	var opts = {
+		cancel : 2,
+		options : ['Lektionen nachladen', 'Lektionen löschen', 'Videokonferenz', 'Abbruch'],
+		selectedIndex : 2,
+		destructive : 1,
+		title : 'Optionen'
+	};
+	renew.addEventListener('click', function(e) {
+		var dialog = Ti.UI.createOptionDialog(opts).show({
+			view : renew
+		});
+	});
+
 	var masterwindow = Ti.UI.createWindow({
 		backgroundImage : '/assets/bg.jpg',
 		title : 'Lektionen@AgilentService',
