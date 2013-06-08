@@ -1,4 +1,4 @@
 (function() {
-	require('ui.main').create();
+	require('module/ui.main').create();
 })();
 
