@@ -42,7 +42,7 @@
         <target device="mobileweb">false</target>
         <target device="tizen">false</target>
     </deployment-targets>
-    <sdk-version>3.2.0.arm7</sdk-version>
+    <sdk-version>3.2.0.v20130510175642</sdk-version>
     <ios>
         <min-ios-ver>5.0</min-ios-ver>
         <plist>

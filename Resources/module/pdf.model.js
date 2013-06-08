@@ -3,10 +3,21 @@ exports.get = function(_url, _callback) {
 	var pspdfkit = require('com.pspdfkit');
 	var fileName = parts[parts.length - 1];
 	var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, fileName);
-	if (!f.exists()) {
+
+	if (f.exists()) {
+		try {
+			pspdfkit.imageForDocument(f.nativePath, 0, 1);
+			_callback({
+				pdfpath : f.nativePath,
+				preview : pspdfkit.imageForDocument(f.nativePath, 0, 1)
+			});
+		} catch(E) {
+			alert(E);
+		}
+	} else {
 		var xhr = Titanium.Network.createHTTPClient({
 			onload : function() {
-				console.log(this.status +' ' +_url);
+				console.log(this.status + ' ' + _url);
 				if (this.status == 200) {
 					_callback({
 						pdfpath : f.nativePath,
@@ -17,14 +28,8 @@ exports.get = function(_url, _callback) {
 			timeout : 60000
 		});
 		xhr.open('GET', _url);
-		console.log(_url);
 		xhr.file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, fileName);
 		xhr.send();
-	} else {
-		_callback({
-			pdfpath : f.nativePath,
-			preview : pspdfkit.imageForDocument(f.nativePath, 0, 1)
-		});
 	}
 }
 

@@ -15,7 +15,6 @@ exports.create = function() {
 		backgroundImage : 'appicon.png',
 		borderRadius : 8
 	});
-	actionbutton.addEventListener('click', updateList);
 	var opts = {
 		cancel : 2,
 		options : ['Lektionen nachladen', 'Lektionen löschen', 'Videokonferenz', 'Abbruch'],
