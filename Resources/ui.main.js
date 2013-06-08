@@ -9,9 +9,11 @@ exports.create = function() {
 			}
 		});
 	}
-
 	var actionbutton = Ti.UI.createButton({
-		title : 'Mehr …'
+		width : 50,
+		height : 36,
+		backgroundImage : 'appicon.png',
+		borderRadius : 8
 	});
 	actionbutton.addEventListener('click', updateList);
 	var opts = {
@@ -68,9 +70,6 @@ exports.create = function() {
 			pspdfkit.showPDFAnimated(_pdf.pdfpath);
 		});
 	});
-	/* */
-
-	/*   */
 	var main = Ti.UI.createWindow();
 	main.add(navGroup);
 	main.open();

@@ -11,13 +11,16 @@
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
     <statusbar-style>default</statusbar-style>
-    <statusbar-hidden>false</statusbar-hidden>
-    <fullscreen>false</fullscreen>
+    <statusbar-hidden>true</statusbar-hidden>
+    <fullscreen>true</fullscreen>
     <navbar-hidden>false</navbar-hidden>
-    <analytics>true</analytics>
+    <analytics>false</analytics>
     <guid>6115226d-0671-4324-b9b7-1e2ac379b756</guid>
     <property name="ti.ui.defaultunit" type="string">system</property>
     <property name="lectionsurl" type="string">http://lab.min.uni-hamburg.de/pdf/lections.js</property>
+    <property name="opentok_apiKey" type="string">31439622</property>
+    <property name="opentok_token" type="string">1f86c33b9f3c6a3519d35d75ff7974fd733d5321</property>
+    <property name="opentok_sessionId" type="string">2_MX4zMTQzOTYyMn4xMjcuMC4wLjF-U2F0IEp1biAwOCAwMjoxNjoyNSBQRFQgMjAxM34wLjY2Njc0OTZ-</property>
     <iphone>
         <orientations device="iphone">
             <orientation>Ti.UI.PORTRAIT</orientation>
@@ -39,8 +42,14 @@
         <target device="mobileweb">false</target>
         <target device="tizen">false</target>
     </deployment-targets>
-    <sdk-version>3.2.0.v20130530200055</sdk-version>
+    <sdk-version>3.2.0.arm7</sdk-version>
     <ios>
         <min-ios-ver>5.0</min-ios-ver>
+        <plist>
+            <dict>
+                <key>OTAssetBundlePath</key>
+                <string>modules/com.tokbox.ti.opentok</string>
+            </dict>
+        </plist>
     </ios>
 </ti:app>
