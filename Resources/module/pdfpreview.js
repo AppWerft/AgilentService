@@ -7,9 +7,9 @@ exports.create = function(pdf) {
 		height : 140
 	});
 	self.preview = Ti.UI.createImageView({
-		width : 130,
+		width : 100,
 		top : 0,
-		height : 130,
+		height : 100,
 		bubbleParent : true,
 		borderRadius : 8,
 		parent : self,
