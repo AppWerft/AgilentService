@@ -439,7 +439,6 @@ exports.create = function() {
 			});
 		}
 	});
-
 	Ti.App.addEventListener('test_pdf_downloaded', function(e) {
 		pspdfkit.showPDFAnimated(e.filePath);
 	});
