@@ -1,0 +1,61 @@
+Undefined symbols for architecture i386:
+  "_CVPixelBufferCreate", referenced from:
+      -[AVCEncoder prepareEncoder] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+  "_CVPixelBufferCreateWithBytes", referenced from:
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+  "_CVPixelBufferGetBaseAddress", referenced from:
+      -[OTCaptureManager captureOutput:didOutputSampleBuffer:fromConnection:] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[GLVideoProcessor printNetworkTimeToFrame:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      -[GLVideoProcessor processCameraFrame:rotationAngle:adjustAspectRatio:usePillarbox:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      _CGImageCreateFromSampleBuffer in libcom.tokbox.ti.opentok.a(CGImageUtils.o)
+  "_CVPixelBufferGetBytesPerRow", referenced from:
+      -[OTCaptureManager captureOutput:didOutputSampleBuffer:fromConnection:] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      _CGImageCreateFromSampleBuffer in libcom.tokbox.ti.opentok.a(CGImageUtils.o)
+  "_CVPixelBufferGetHeight", referenced from:
+      -[OTCaptureManager captureOutput:didOutputSampleBuffer:fromConnection:] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[GLVideoProcessor printNetworkTimeToFrame:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      -[GLVideoProcessor processCameraFrame:rotationAngle:adjustAspectRatio:usePillarbox:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      _CGImageCreateFromSampleBuffer in libcom.tokbox.ti.opentok.a(CGImageUtils.o)
+  "_CVPixelBufferGetWidth", referenced from:
+      -[GLVideoProcessor printNetworkTimeToFrame:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      -[GLVideoProcessor processCameraFrame:rotationAngle:adjustAspectRatio:usePillarbox:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      _CGImageCreateFromSampleBuffer in libcom.tokbox.ti.opentok.a(CGImageUtils.o)
+  "_CVPixelBufferLockBaseAddress", referenced from:
+      -[OTCaptureManager captureOutput:didOutputSampleBuffer:fromConnection:] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[GLVideoProcessor printNetworkTimeToFrame:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      -[GLVideoProcessor processCameraFrame:rotationAngle:adjustAspectRatio:usePillarbox:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      _CGImageCreateFromSampleBuffer in libcom.tokbox.ti.opentok.a(CGImageUtils.o)
+  "_CVPixelBufferRelease", referenced from:
+      -[AVCEncoder prepareEncoder] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+  "_CVPixelBufferUnlockBaseAddress", referenced from:
+      -[OTCaptureManager captureOutput:didOutputSampleBuffer:fromConnection:] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[GLVideoProcessor printNetworkTimeToFrame:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      -[GLVideoProcessor processCameraFrame:rotationAngle:adjustAspectRatio:usePillarbox:] in libcom.tokbox.ti.opentok.a(GLVideoProcessor.o)
+      _CGImageCreateFromSampleBuffer in libcom.tokbox.ti.opentok.a(CGImageUtils.o)
+  "_CVPixelFormatDescriptionCreateWithPixelFormatType", referenced from:
+      -[AVCEncoder prepareEncoder] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+  "_OBJC_CLASS_$_CTTelephonyNetworkInfo", referenced from:
+      objc-class-ref in libcom.tokbox.ti.opentok.a(OTDeviceInfo.o)
+  "_kCVPixelBufferCGBitmapContextCompatibilityKey", referenced from: 
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+  "_kCVPixelBufferCGImageCompatibilityKey", referenced from:
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+  "_kCVPixelBufferHeightKey", referenced from:
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+  "_kCVPixelBufferPixelFormatTypeKey", referenced from:
+      -[OTCaptureManager addVideoDataOutput] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+      -[AVCEncoder setupWriterObj] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+      -[AVCEncoder generateSPSPPS:] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+      -[OTCaptureManager addVideoDataOutput] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+      -[AVCEncoder setupWriterObj] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+      -[AVCEncoder generateSPSPPS:] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+      -[OTCaptureManager addVideoDataOutput] in libcom.tokbox.ti.opentok.a(OTCaptureManager.o)
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+      -[AVCEncoder setupWriterObj] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+      -[AVCEncoder generateSPSPPS:] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
+  "_kCVPixelBufferWidthKey", referenced from:
+      -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
+ld: symbol(s) not found for architecture i386
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
