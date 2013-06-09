@@ -36,7 +36,7 @@ Undefined symbols for architecture i386:
       -[AVCEncoder prepareEncoder] in libcom.tokbox.ti.opentok.a(AVCEncoder.o)
   "_OBJC_CLASS_$_CTTelephonyNetworkInfo", referenced from:
       objc-class-ref in libcom.tokbox.ti.opentok.a(OTDeviceInfo.o)
-  "_kCVPixelBufferCGBitmapContextCompatibilityKey", referenced from:   
+  "_kCVPixelBufferCGBitmapContextCompatibilityKey", referenced from:
       -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
   "_kCVPixelBufferCGImageCompatibilityKey", referenced from:
       -[OTVideoSynthesizer tick] in libcom.tokbox.ti.opentok.a(OTVideoSynthesizer.o)
