@@ -33,7 +33,7 @@
     <android xmlns:android="http://schemas.android.com/apk/res/android"/>
     <modules>
         <module platform="iphone">com.pspdfkit</module>
-        <module platform="iphone" version="0.2.2-alpha">com.tokbox.ti.opentok</module>
+        <module platform="iphone" version="0.2.1">com.tokbox.ti.opentok</module>
     </modules>
     <deployment-targets>
         <target device="blackberry">false</target>
