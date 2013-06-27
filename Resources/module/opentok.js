@@ -6,19 +6,12 @@ exports.create = function(_actionsbutton) {
 		apiKey : Ti.App.Properties.getString('opentok_apiKey'),
 		token : Ti.App.Properties.getString('opentok_token')
 	};
-	try {
-		self = Ti.UI.iPad.createPopover({
-			width : 360,
-			height : 540,
-			title : 'Videokonferenz',
-		});
-	} catch(E) {
-		self = Ti.UI.createView({
-			width : 360,
-			height : 540,
-			title : 'Videokonferenz',
-		});
-	}
+
+	self = Ti.UI.createView({
+		width : 360,
+		height : 540,
+		title : 'Videokonferenz',
+	});
 	var OpenTok = require("com.tokbox.ti.opentok");
 	var session = OpenTok.createSession({
 		sessionId : CONF.sessionId
@@ -28,9 +21,8 @@ exports.create = function(_actionsbutton) {
 	session.addEventListener("sessionConnected", function(event) {
 		self.connectingSpinner.hide();
 		self.remove(self.connectingSpinner);
-		Ti.Media.vibrate();
 		publisher = session.publish();
-		publisherView = publisher.createView({
+		self.publisherView = publisher.createView({
 			width : 360,
 			height : 540
 		});
@@ -48,9 +40,7 @@ exports.create = function(_actionsbutton) {
 	});
 	self.add(self.connectingSpinner);
 	self.connectingSpinner.show();
-	self.show({
-		view : _actionsbutton
-	});
+
 	/*if (publisherView)
 	 self.add(publisherView);
 	 else {

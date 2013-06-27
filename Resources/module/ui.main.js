@@ -35,7 +35,16 @@ exports.create = function() {
 					updateList()
 					break;
 				case 1:
-					require('module/opentok').create(actionbutton);
+					var popover = Ti.UI.iPad.createPopover({
+						width : 480,
+						height : 540,
+						title : 'Videokonferenz',
+					});
+					var OpenTokView = require('module/opentok_view');
+					popover.add(new OpenTokView());
+					popover.show({
+						view : actionbutton
+					});
 					break;
 			}
 		});
@@ -65,7 +74,7 @@ exports.create = function() {
 		if (!item.url)
 			return;
 		var url = item.url;
-		require('module/pdf.model').get(url,item.pb ,function(_pdf) {
+		require('module/pdf.model').get(url, item.pb, function(_pdf) {
 			pspdfkit.showPDFAnimated(_pdf.pdfpath, 4, {
 				lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
 				pageMode : 0, // PSPDFPageModeSingle
@@ -73,7 +82,7 @@ exports.create = function() {
 				linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
 				thumbnailSize : [200, 200], // Allows custom thumbnail size.
 				leftBarButtonItems : ["closeButtonItem"]
-			//	additionalBarButtonItems : ["openInButtonItem", "emailButtonItem", "printButtonItem", "searchButtonItem", "outlineButtonItem"] 
+				//	additionalBarButtonItems : ["openInButtonItem", "emailButtonItem", "printButtonItem", "searchButtonItem", "outlineButtonItem"]
 			}, {
 				//title : "Titel der Lektion",
 			});
