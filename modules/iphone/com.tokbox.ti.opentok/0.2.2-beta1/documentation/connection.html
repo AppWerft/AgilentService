@@ -1,0 +1,26 @@
+<h1>Connection</h1>
+<p>A Connection represents one client that is connected to the <a href="session.md#session">Session</a>. Each device, whether it is publishing, subscribing, or just connected to a session is represented by a Connection object.</p>
+<p><nav>
+  <table>
+    <tr>
+      <th>Methods</th>
+      <th>Properties</th>
+      <th>Events</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td><a href="#connectionid">connectionId</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><a href="#creationtime">creationTime</a></td>
+      <td></td>
+    </tr>
+  </table>
+</nav></p>
+<h2>Properties</h2>
+<h3>connectionId</h3>
+<p>(String) An identifier for this Connection. This is created automatically by OpenTok. It is useful for comparing a <code>stream.connection.connectionId</code> to the <code>session.connection.connectionId</code>, if they are equal then the stream originates from this device. <em>Read Only</em></p>
+<h3>creationTime</h3>
+<p>(Date) The time the connection was created.</p>

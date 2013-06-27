@@ -5,31 +5,25 @@ exports.create = function(_actionsbutton) {
 		var session = OpenTok.createSession({
 			sessionId : Ti.App.Properties.getString('sessionId')
 		});
-		session.connect(Ti.App.Properties.getString('apiKey'), Ti.App.Properties.getString('token'));
+		session.connect(Ti.App.Properties.getString('opentok_apiKey'), Ti.App.Properties.getString('opentok_token'));
 		session.addEventListener("sessionConnected", function(event) {
+			Ti.Media.vibrate();
 			publisher = session.publish();
 			publisherView = publisher.createView({
 				width : 360,
 				height : 540
 			});
-			add(publisherView);
 		});
 	} catch(E) {
+		console.log(E);
 	}
-	var rightButton = Ti.UI.createButton({
-		title : 'Anrufen'
-	});
 	var self = Ti.UI.iPad.createPopover({
 		width : 360,
 		height : 540,
 		title : 'Videokonferenz',
-		rightNavButton : rightButton
 	});
 	self.show({
 		view : _actionsbutton
-	});
-	rightButton.addEventListener('click', function(e) {
-		alert("But green's the color of spring.");
 	});
 	if (publisherView)
 		self.add(publisherView);

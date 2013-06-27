@@ -2,6 +2,8 @@ exports.create = function() {
 	var pspdfkit = require('com.pspdfkit');
 	function updateList() {
 		require('module/pdf.model').getlist(function(_lections) {
+			if (!_lections)
+				return;
 			masterview.removeAllChildren();
 			for (var i = 0; i < _lections.length; i++) {
 				_lections[i].title = 'Dokument №' + (i + 1);
@@ -9,6 +11,7 @@ exports.create = function() {
 			}
 		});
 	}
+
 	var actionbutton = Ti.UI.createButton({
 		width : 50,
 		height : 36,
@@ -17,9 +20,8 @@ exports.create = function() {
 	});
 	var opts = {
 		cancel : 2,
-		options : ['Lektionen nachladen', 'Lektionen löschen', 'Videokonferenz', 'Abbruch'],
-		selectedIndex : 2,
-		destructive : 1,
+		options : ['Lektionen aktualisieren', 'Videokonferenz', 'Abbruch'],
+		selectedIndex : 1,
 		title : 'Optionen'
 	};
 	actionbutton.addEventListener('click', function() {
@@ -33,8 +35,6 @@ exports.create = function() {
 					updateList()
 					break;
 				case 1:
-					break;
-				case 2:
 					require('module/opentok').create(actionbutton);
 					break;
 			}
@@ -65,8 +65,18 @@ exports.create = function() {
 		if (!item.url)
 			return;
 		var url = item.url;
-		require('module/pdf.model').get(url, function(_pdf) {
-			pspdfkit.showPDFAnimated(_pdf.pdfpath);
+		require('module/pdf.model').get(url,item.pb ,function(_pdf) {
+			pspdfkit.showPDFAnimated(_pdf.pdfpath, 4, {
+				lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
+				pageMode : 0, // PSPDFPageModeSingle
+				pageTransition : 2, // PSPDFPageCurlTransition
+				linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
+				thumbnailSize : [200, 200], // Allows custom thumbnail size.
+				leftBarButtonItems : ["closeButtonItem"]
+			//	additionalBarButtonItems : ["openInButtonItem", "emailButtonItem", "printButtonItem", "searchButtonItem", "outlineButtonItem"] 
+			}, {
+				//title : "Titel der Lektion",
+			});
 		});
 	});
 	var main = Ti.UI.createWindow();

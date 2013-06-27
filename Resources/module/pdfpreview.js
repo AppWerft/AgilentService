@@ -16,6 +16,19 @@ exports.create = function(pdf) {
 		image : 'appicon.png'
 	})
 	self.add(self.preview);
+	self.pb = Ti.UI.createProgressBar({
+		bottom : 10,
+		width : Ti.UI.FILL,
+		height : 20,
+		transform : Ti.UI.create2DMatrix({
+			scale : 0.6
+		}),
+		min : 0,
+		max : 1,
+		value : 0.1	,
+		zIndex : 999,
+	});
+
 	self.add(Ti.UI.createLabel({
 		height : 20,
 		bottom : 0,
@@ -27,7 +40,8 @@ exports.create = function(pdf) {
 		},
 		text : pdf.title
 	}));
-	require('module/pdf.model').get(pdf.url, function(_pdf) {
+	self.add(self.pb);
+	require('module/pdf.model').get(pdf.url, self.pb, function(_pdf) {
 		self.remove(self.preview);
 		self.add(_pdf.preview);
 	});

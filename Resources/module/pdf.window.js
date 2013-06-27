@@ -59,7 +59,36 @@ exports.create = function(url) {
 	});
 */
 	Ti.App.addEventListener('test_pdf_downloaded', function(e) {
-		pspdfkit.showPDFAnimated(e.filePath);
+		pspdfkit.showPDFAnimated(e.filePath,4,{
+			lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
+			pageMode : 0, // PSPDFPageModeSingle
+			pageTransition : 2, // PSPDFPageCurlTransition
+			linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
+			thumbnailSize : [200, 200], // Allows custom thumbnail size.
+
+			// toolbar config: see http://pspdfkit.com/documentation/Classes/PSPDFViewController.html#//api/name/outlineButtonItem for built in options.
+			// Built in options are send via string. Invalid strings will simply be ignored.
+			leftBarButtonItems : ["closeButtonItem"],
+		//	rightBarButtonItems : [navButton, "viewModeButtonItem"],
+
+			// note that the "annotationButtonItem" is not available in PSPDFKit Basic (the marketplace.appcelerator.com version)
+			// to get text selection and annotation feature, purchase a full license of PSPDFKit Annotate at http://PSPDFKit.com
+			additionalBarButtonItems : ["openInButtonItem", "emailButtonItem", "printButtonItem", "searchButtonItem", "outlineButtonItem", "annotationButtonItem"] // text list, does *not* support custom buttons.
+			// pageMode values 0=single page, 1=double page, 2=automatic
+			// some supported properties
+			// see http://pspdfkit.com/documentation/Classes/PSPDFViewController.html
+			/* doublePageModeOnFirstPage: true,
+			 * page" : 3,
+			 * pageScrolling" : 1,
+			 * zoomingSmallDocumentsEnabled : false,
+			 * fitToWidthEnabled : false,
+			 * maximumZoomScale : 1.3,
+			 * pagePadding : 80,
+			 * shadowEnabled : false,
+			 * backgroundColor : "#FF0000", */
+		}, {
+			title : "Titel der Lektion",
+		});
 	});
 	return window;
 }
