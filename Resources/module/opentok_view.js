@@ -4,13 +4,20 @@ var CONFIG = {
 	token : Ti.App.Properties.getString('opentok_token')
 };
 var self;
+function log(txt) {
+	self.monitor.add(Ti.UI.createLabel({
+		text : txt,
+		height : 20,
+		left : 10,
+		top : 0
+	}));
+}
 
 /* Docu */
 
 //  https://github.com/opentok/opentok-titanium-mobile/blob/master/documentation/index.md
 
 var OpenTok = function() {
-
 	self = Ti.UI.createView({
 		height : 'auto',
 		width : 'auto'
@@ -26,48 +33,52 @@ var OpenTok = function() {
 	self.session.addEventListener("streamCreated", streamCreatedHandler);
 	self.session.connect(CONFIG.apiKey, CONFIG.token);
 
-	// publishing only works from device: let's find out where we are
 	self.onDevice = (Ti.Platform.architecture === 'arm');
-
-	// create labels
-
-	// show connecting modal
 	self.connectingSpinner = Ti.UI.createActivityIndicator({
 		color : 'white',
 		message : 'Connecting...',
 		style : Titanium.UI.iPhone.ActivityIndicatorStyle.BIG,
-		height : 200,
-		width : 200,
+		height : 100,
+		width : 100,
 		backgroundColor : 'black',
 		borderRadius : 10
 	});
 	self.add(self.connectingSpinner);
 	self.connectingSpinner.show();
+	self.monitor = Ti.UI.createScrollView({
+		bottom : 0,
+		backgroundColor : 'white',
+		height : 200,
+		width : Ti.UI.FILL,
+		layout : 'vertical',
+		contentWidth : Ti.UI.FILL,
+		contentHEight : Ti.UI.SIZE
+	});
+	self.add(self.monitor);
 	return this;
 }
 /*moduleprivate functions: */
 function sessionConnectedHandler(event) {
-	// Dismiss spinner
+	log('connected');
 	self.connectingSpinner.hide();
 	self.remove(self.connectingSpinner);
-	self.layout = 'vertical';
-
-	// Start publishing from my camera
 	if (self.onDevice) {
+		if (self.subscriber)
+			return;
 		self.publisher = self.session.publish();
 		self.publisherView = self.publisher.createView({
-			width : 100,
-			height : 80,
+			width : 200,
+			height : 200,
 			zIndex : 99,
-			bottom : 0,
+			top : 0,
 			right : 0
 		});
-
 		self.add(self.publisherView);
 	}
 }
 
 function sessionDisconnectedHandler(event) {
+	log('disconnected');
 	// Remove publisher, subscriber, and their labels
 	if (self.publisherView)
 		self.remove(self.publisherView);
@@ -77,13 +88,17 @@ function sessionDisconnectedHandler(event) {
 
 function streamCreatedHandler(event) {
 	if (event.stream.connection.connectionId === self.session.connection.connectionId) {
+		log('own stream');
 		return;
 	}
+	log('other streamHandler');
+
 	self.subscriber = self.session.subscribe(event.stream);
 	self.subscriberView = self.subscriber.createView({
-		width : 'auto',
-		height : 'auto',
+		width : 300,
+		height : 300,
 		top : 0,
+		left : 0,
 		zIndex : 1
 	});
 	self.add(self.subscriberView);
@@ -98,11 +113,20 @@ function sessionFailedHandler(event) {
 OpenTok.prototype.getView = function() {
 	return self;
 }
+
 OpenTok.prototype.finishSession = function() {
 	if (self.session) {
-		//self.session.unpublish();
+		if (self.subscriber) {
+			self.subscriber.close();
+			self.remove(self.subscriberView);
+			//			self.subscriberView  = null;
+		}
+		if (self.publisher) {
+			self.session.unpublish();
+			self.remove(self.publisherView);
+		}
 		self.session.disconnect();
-		//self.removeAllChildren();
+		self.removeAllChildren();
 		console.log('Finish killing');
 	}
 }
