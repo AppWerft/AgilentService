@@ -45,11 +45,14 @@ exports.create = function() {
 						view : actionbutton
 					});
 					var OpenTok = new OpenTokModul();
-					OpenTokContainer.add(OpenTok.getView());
+					var opentokview = OpenTok.getView();
+					OpenTokContainer.add(opentokview);
 					OpenTokContainer.addEventListener('hide', function() {
 						console.log('Start killing');
 						OpenTok.finishSession();
-						OpenTokContainer.remove(OpenTok.getView());
+						console.log('Stop killing, try to remove view');
+						OpenTokContainer.remove(opentokview);
+						OpenTok = null;
 					});
 
 					break;

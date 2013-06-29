@@ -6,7 +6,7 @@ var CONFIG = {
 var self;
 function log(txt) {
 	self.monitor.add(Ti.UI.createLabel({
-		text : txt,
+		text : txt + ' ' + self.session.connectionCount,
 		height : 20,
 		left : 10,
 		top : 0
@@ -18,15 +18,18 @@ function log(txt) {
 //  https://github.com/opentok/opentok-titanium-mobile/blob/master/documentation/index.md
 
 var OpenTok = function() {
+	console.log('=======' + 'Start construktor')
+
 	self = Ti.UI.createView({
 		height : 'auto',
 		width : 'auto'
 	});
-	self.opentok = require('com.tokbox.ti.opentok');
-	self.session = self.opentok.createSession({
+	console.log('=======' + 'View')
+
+	self.session = Ti.OpenTok.createSession({
 		sessionId : CONFIG.sessionId
 	});
-	self.session.environment = 'production';
+	console.log('=======' + self.session.sessionConnectionStatus);
 	self.session.addEventListener("sessionConnected", sessionConnectedHandler);
 	self.session.addEventListener("sessionDisconnected", sessionDisconnectedHandler);
 	self.session.addEventListener("sessionFailed", sessionFailedHandler);
@@ -48,7 +51,7 @@ var OpenTok = function() {
 	self.monitor = Ti.UI.createScrollView({
 		bottom : 0,
 		backgroundColor : 'white',
-		height : 200,
+		height : 100,
 		width : Ti.UI.FILL,
 		layout : 'vertical',
 		contentWidth : Ti.UI.FILL,
@@ -63,8 +66,6 @@ function sessionConnectedHandler(event) {
 	self.connectingSpinner.hide();
 	self.remove(self.connectingSpinner);
 	if (self.onDevice) {
-		if (self.subscriber)
-			return;
 		self.publisher = self.session.publish();
 		self.publisherView = self.publisher.createView({
 			width : 200,
@@ -92,8 +93,8 @@ function streamCreatedHandler(event) {
 		return;
 	}
 	log('other streamHandler');
-
-	self.subscriber = self.session.subscribe(event.stream);
+	if (!self.subsriber)
+		self.subscriber = self.session.subscribe(event.stream);
 	self.subscriberView = self.subscriber.createView({
 		width : 300,
 		height : 300,
@@ -125,8 +126,9 @@ OpenTok.prototype.finishSession = function() {
 			self.session.unpublish();
 			self.remove(self.publisherView);
 		}
-		self.session.disconnect();
-		self.removeAllChildren();
+		if (self.session.sessionConnectionStatus == 'connected')
+			self.session.disconnect();
+		//self.removeAllChildren();
 		console.log('Finish killing');
 	}
 }

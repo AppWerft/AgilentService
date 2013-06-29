@@ -1,4 +1,5 @@
 (function() {
+	Ti.OpenTok = require('com.tokbox.ti.opentok');
 	require('module/ui.main').create();
 })();
 
