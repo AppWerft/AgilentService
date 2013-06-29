@@ -5,9 +5,12 @@ var CONFIG = {
 };
 var self;
 
-function HelloView() {
-	// create object instance
-	if (self) self=null;
+/* Docu */
+
+//  https://github.com/opentok/opentok-titanium-mobile/blob/master/documentation/index.md
+
+var OpenTok = function() {
+
 	self = Ti.UI.createView({
 		height : 'auto',
 		width : 'auto'
@@ -27,16 +30,6 @@ function HelloView() {
 	self.onDevice = (Ti.Platform.architecture === 'arm');
 
 	// create labels
-	self.publisherLabel = Ti.UI.createLabel({
-		top : 20,
-		text : 'Publisher',
-		color : 'white'
-	});
-	self.subscriberLabel = Ti.UI.createLabel({
-		top : 20,
-		text : 'Subscriber',
-		color : 'white'
-	});
 
 	// show connecting modal
 	self.connectingSpinner = Ti.UI.createActivityIndicator({
@@ -50,10 +43,9 @@ function HelloView() {
 	});
 	self.add(self.connectingSpinner);
 	self.connectingSpinner.show();
-
-	return self;
+	return this;
 }
-
+/*moduleprivate functions: */
 function sessionConnectedHandler(event) {
 	// Dismiss spinner
 	self.connectingSpinner.hide();
@@ -64,21 +56,23 @@ function sessionConnectedHandler(event) {
 	if (self.onDevice) {
 		self.publisher = self.session.publish();
 		self.publisherView = self.publisher.createView({
-			width : 200,
-			height : 150,
-			top : 20
+			width : 100,
+			height : 80,
+			zIndex : 99,
+			bottom : 0,
+			right : 0
 		});
-		self.add(self.publisherLabel);
+
 		self.add(self.publisherView);
 	}
 }
 
 function sessionDisconnectedHandler(event) {
 	// Remove publisher, subscriber, and their labels
-	self.remove(self.publisherLabel);
-	self.remove(self.publisherView);
-	self.remove(self.subscriberLabel);
-	self.remove(self.subscriberView);
+	if (self.publisherView)
+		self.remove(self.publisherView);
+	if (self.subscriberView)
+		self.remove(self.subscriberView);
 }
 
 function streamCreatedHandler(event) {
@@ -87,9 +81,10 @@ function streamCreatedHandler(event) {
 	}
 	self.subscriber = self.session.subscribe(event.stream);
 	self.subscriberView = self.subscriber.createView({
-		width : 320,
-		height : 240,
-		top : 20
+		width : 'auto',
+		height : 'auto',
+		top : 0,
+		zIndex : 1
 	});
 	self.add(self.subscriberView);
 }
@@ -98,4 +93,17 @@ function sessionFailedHandler(event) {
 	Ti.API.info(event.error.message);
 }
 
-module.exports = HelloView;
+/*public methods: */
+
+OpenTok.prototype.getView = function() {
+	return self;
+}
+OpenTok.prototype.finishSession = function() {
+	if (self.session) {
+		//self.session.unpublish();
+		self.session.disconnect();
+		//self.removeAllChildren();
+		console.log('Finish killing');
+	}
+}
+module.exports = OpenTok;

@@ -35,16 +35,23 @@ exports.create = function() {
 					updateList()
 					break;
 				case 1:
-					var popover = Ti.UI.iPad.createPopover({
+					var OpenTokModul = require('module/opentok_view');
+					var OpenTokContainer = Ti.UI.iPad.createPopover({
 						width : 480,
 						height : 540,
 						title : 'Videokonferenz',
 					});
-					var OpenTokView = require('module/opentok_view');
-					popover.add(new OpenTokView());
-					popover.show({
+					OpenTokContainer.show({
 						view : actionbutton
 					});
+					var OpenTok = new OpenTokModul();
+					OpenTokContainer.add(OpenTok.getView());
+					OpenTokContainer.addEventListener('hide', function() {
+						console.log('Start killing');
+						OpenTok.finishSession();
+						OpenTokContainer.remove(OpenTok.getView());
+					});
+
 					break;
 			}
 		});
