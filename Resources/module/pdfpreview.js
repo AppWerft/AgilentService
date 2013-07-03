@@ -25,25 +25,26 @@ exports.create = function(pdf) {
 		}),
 		min : 0,
 		max : 1,
-		value : 0.1	,
+		value : 0.1,
 		zIndex : 999,
 	});
-
-	self.add(Ti.UI.createLabel({
+	self.title = Ti.UI.createLabel({
 		height : 20,
 		bottom : 0,
 		bubbleParent : true,
-		color : 'yellow',
+		color : 'black',
 		zIndex : 999,
 		font : {
 			fontSize : 12
 		},
-		text : pdf.title
-	}));
+		text : 'Name der Lektion'
+	});
+	self.add(self.title);
 	self.add(self.pb);
-	require('module/pdf.model').get(pdf.url, self.pb, function(_pdf) {
+	require('module/pdf.model').getPdfDocument(pdf.url, self.pb, function(_pdf) {
 		self.remove(self.preview);
 		self.add(_pdf.preview);
+		self.title.setText(_pdf.title);
 	});
 	return self;
 }

@@ -1,0 +1,48 @@
+[
+	{
+		"title": "Thema 1",
+		"pdfs": [
+			{
+				"url": "1.pdf",
+				"title": "Anleitung 1"
+			}
+		]
+	}, {
+		"title": "Thema 2",
+		"subs": [
+			{
+				"title": "Thema 2.1"
+			}, {
+				"title": "Thema 2.2"
+			}, {
+				"title": "Thema 2.3",
+				"subs": [
+					{
+						"subs": [
+							{
+								"title": "Thema 2.3.1",
+								"pdfs": [
+									{
+										"url": "xyz.pdf",
+										"title": "Anleitung xyz"
+									}, {
+										"url": "xyz2.pdf",
+										"title": "Anleitung xyz2"
+									}
+								]
+							}, {
+								"title": "Thema 2.3.2"
+							}, {
+								"title": "Thema 2.3.3"
+							}, {
+								"title": "Thema 2.3.4"
+							}
+						]
+					}, {}
+				]
+			}
+		]
+	}, {
+		"title": "Thema 3"
+	}
+]
