@@ -4,7 +4,8 @@ exports.create = function(pdf) {
 		top : 20,
 		left : 20,
 		url : pdf.url,
-		height : 140
+		height : 140,
+		visible : false
 	});
 	self.preview = Ti.UI.createImageView({
 		width : 100,
