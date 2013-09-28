@@ -48,4 +48,5 @@ exports.create = function(pdf) {
 		self.title.setText(_pdf.title);
 	});
 	return self;
-}
+};
+

@@ -26,7 +26,7 @@ var OpenTok = function() {
 	});
 	console.log('=======' + 'View')
 
-	self.session = Ti.OpenTok.createSession({
+	self.session = Ti.App.OpenTok.createSession({
 		sessionId : CONFIG.sessionId
 	});
 	console.log('=======' + self.session.sessionConnectionStatus);

@@ -1,5 +1,17 @@
 (function() {
-	Ti.OpenTok = require('com.tokbox.ti.opentok');
+	Ti.App.OpenTok = require('com.tokbox.ti.opentok');
+	Ti.App.PSPDFKIT = require('com.pspdfkit.source');
+	Ti.App.PSPDFKIT.setLicenseKey(Ti.App.Properties.getString('pspdfkit_licencekey'));
+	Ti.App.PSPDFKIT.setLogLevel(4);
+	Ti.App.PSPDFKIT.setLanguageDictionary({
+		"en" : {
+			"Table Of Contents" : "Outline",
+			"Go to %@" : "%@",
+		},
+		"de" : {
+			"Grid" : "Übersicht"
+		}
+	});
 	require('module/ui.main').create();
 })();
 

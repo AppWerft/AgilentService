@@ -3,22 +3,10 @@ exports.create = function(url) {
 		backgroundColor : 'white'
 	});
 	window.orientationModes = [Titanium.UI.PORTRAIT, Titanium.UI.LANDSCAPE_LEFT, Titanium.UI.LANDSCAPE_RIGHT];
-	var pspdfkit = require('com.pspdfkit');
-	pspdfkit.setLogLevel(3);
-	pspdfkit.setLanguageDictionary({
-		"en" : {
-			// general
-			"Table Of Contents" : "Outline",
-			"Go to %@" : "%@",
-		},
-		"de" : {
-			"Grid" : "Übersicht"
-		}
-	});
 	
-	
-	var pdfView = pspdfkit.createView({
-		top :0,
+
+	var pdfView = Ti.App.PSPDFKIT.createView({
+		top : 0,
 		right : 0,
 		bottom : 0,
 		left : 0,
@@ -35,31 +23,31 @@ exports.create = function(url) {
 	pdfView.setAnnotationSaveMode(1);
 	pdfView.thumbnailFilterOptions = null;
 	window.add(pdfView);
-/*
-	webDownloadTestButton.addEventListener('click', function(e) {
-		var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, fileName);
-		if (!f.exists()) {
-			var xhr = Titanium.Network.createHTTPClient({
-				onload : function() {
-					Ti.API.info('PDF downloaded to appDataDirectory/' + fileName);
-					Ti.App.fireEvent('test_pdf_downloaded', {
-						filePath : f.nativePath
-					});
-				},
-				timeout : 15000
-			});
-			xhr.open('GET', 'http://www.enough.de/fileadmin/uploads/dev_guide_pdfs/Guide_11thEdition_WEB-1.pdf');
-			xhr.file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, fileName);
-			xhr.send();
-		} else {
-			Ti.App.fireEvent('test_pdf_downloaded', {
-				filePath : f.nativePath
-			});
-		}
-	});
-*/
+	/*
+	 webDownloadTestButton.addEventListener('click', function(e) {
+	 var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, fileName);
+	 if (!f.exists()) {
+	 var xhr = Titanium.Network.createHTTPClient({
+	 onload : function() {
+	 Ti.API.info('PDF downloaded to appDataDirectory/' + fileName);
+	 Ti.App.fireEvent('test_pdf_downloaded', {
+	 filePath : f.nativePath
+	 });
+	 },
+	 timeout : 15000
+	 });
+	 xhr.open('GET', 'http://www.enough.de/fileadmin/uploads/dev_guide_pdfs/Guide_11thEdition_WEB-1.pdf');
+	 xhr.file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, fileName);
+	 xhr.send();
+	 } else {
+	 Ti.App.fireEvent('test_pdf_downloaded', {
+	 filePath : f.nativePath
+	 });
+	 }
+	 });
+	 */
 	Ti.App.addEventListener('test_pdf_downloaded', function(e) {
-		pspdfkit.showPDFAnimated(e.filePath,4,{
+		Ti.App.PSPDFKIT.showPDFAnimated(e.filePath, 4, {
 			lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
 			pageMode : 0, // PSPDFPageModeSingle
 			pageTransition : 2, // PSPDFPageCurlTransition
@@ -69,7 +57,7 @@ exports.create = function(url) {
 			// toolbar config: see http://pspdfkit.com/documentation/Classes/PSPDFViewController.html#//api/name/outlineButtonItem for built in options.
 			// Built in options are send via string. Invalid strings will simply be ignored.
 			leftBarButtonItems : ["closeButtonItem"],
-		//	rightBarButtonItems : [navButton, "viewModeButtonItem"],
+			//	rightBarButtonItems : [navButton, "viewModeButtonItem"],
 
 			// note that the "annotationButtonItem" is not available in PSPDFKit Basic (the marketplace.appcelerator.com version)
 			// to get text selection and annotation feature, purchase a full license of PSPDFKit Annotate at http://PSPDFKit.com
@@ -91,4 +79,4 @@ exports.create = function(url) {
 		});
 	});
 	return window;
-}
+};

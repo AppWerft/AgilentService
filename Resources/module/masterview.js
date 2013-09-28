@@ -23,7 +23,7 @@ exports.create = function() {
 			return;
 		var url = item.url;
 		require('module/pdf.model').get(url, item.pb, function(_pdf) {
-			pspdfkit.showPDFAnimated(_pdf.pdfpath, 4, {
+			Ti.App.PSPDFKIT.showPDFAnimated(_pdf.pdfpath, 4, {
 				lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
 				pageMode : 0, // PSPDFPageModeSingle
 				pageTransition : 2, // PSPDFPageCurlTransition

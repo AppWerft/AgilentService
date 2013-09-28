@@ -1,0 +1,17 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 3.0.0
+description: PSPDFKit Annotate Titanium Module
+author: Peter Steinberger
+license: Commercial, see www.PSPDFKit.com
+copyright: Copyright (c) 2011-2013 by Peter Steinberger
+
+
+# these should not be edited
+name: PSPDFKit
+moduleid: com.pspdfkit.source
+guid: 3056f4e3-4ee6-4cf3-8417-1d8b8f95853c0
+platform: iphone
+minsdk: 3.1.3.GA

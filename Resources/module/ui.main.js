@@ -63,9 +63,9 @@ exports.create = function() {
 				});
 			}
 			var opts = {
-				cancel : 3,
+				cancel : 2,
 				destructive : 0,
-				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', '✱ Videokonferenz ✱ ', 'Abbruch'],
+				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', 'Abbruch'],
 				selectedIndex : 1,
 				title : 'Haupt-Menü'
 			};
@@ -108,4 +108,4 @@ exports.create = function() {
 		}
 	});
 	Ti.App.addEventListener('resume', require('module/mirror').all());
-}
+};

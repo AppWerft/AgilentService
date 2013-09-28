@@ -40,8 +40,10 @@ exports.all = function() {
 			}
 		},
 		onload : function(_name) {
+			console.log('Info: pdf mirrored ' + _name);
 			if (progresses[_name]) {
 				progressdisplay.remove(progresses[_name]);
+				console.log('Info: proegress removed');
 				delete progresses[_name];
 				total--;
 			}
@@ -49,9 +51,10 @@ exports.all = function() {
 			for (var key in progresses) {
 				i++;
 			}
+			console.log('Info: i/total:' + i + '/' + total);
 			if (!i && !total) {
 				progressdisplay.close();
 			}
 		}
 	});
-}
+};
