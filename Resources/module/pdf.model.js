@@ -5,9 +5,10 @@ if (!Ti.App.Properties.hasProperty('recent'))
 
 exports.getPDF = function(_args) {
 	var url = (_args.modus == 'start') ? [null, null, 'StartIndex.pdf', 0] : Ti.App.Properties.getString('recent').match(/^pspdfkit:\/\/(.*?)\/(.*?)#page=(.*)/);
+	if (!url)
+		return;
 	var filename = url[2];
 	var page = url[3];
-	console.log(url);
 	var filehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, filename);
 	if (filehandle.exists()) {
 		_args.onload({
@@ -99,10 +100,9 @@ exports.getPdfDocument = function(_url, _pb, _callback) {
 	}
 }
 
-exports.getClientNumber = function(_callback) {
+exports.getClientNumber = function(_args) {
 	if (Ti.App.Properties.hasProperty('clientId')) {
-		_callback(Ti.App.Properties.getString('clientId'));
-
+		_args.onsuccess(Ti.App.Properties.getString('clientId'));
 	} else {
 		var dialog = Ti.UI.createAlertDialog({
 			title : 'Kundennummerneingabe',
@@ -112,7 +112,7 @@ exports.getClientNumber = function(_callback) {
 		dialog.addEventListener('click', function(e) {
 			if (e.text == '1234') {
 				Ti.App.Properties.setString('clientId', e.text);
-				_callback(Ti.App.Properties.getString('clientId'))
+				_args.onsuccess(Ti.App.Properties.getString('clientId'))
 			}
 		})
 		dialog.show();
@@ -121,17 +121,23 @@ exports.getClientNumber = function(_callback) {
 
 exports.mirrorAll = function(_argc) {
 	function mirrorPDF(pdffile) {
+		pdffile.title = pdffile.name.replace(/\.pdf/i, '');
+		_argc.onstart(pdffile.title);
 		var xhr = Titanium.Network.createHTTPClient({
 			username : Ti.App.Properties.getString('credentials').split(':')[0],
 			password : Ti.App.Properties.getString('credentials').split(':')[1],
 			ondatastream : function(_e) {
-				//	_pb.setValue(_e.progress);
+				_argc.onprogress({
+					name : pdffile.title,
+					progress : _e.progress
+				})
 			},
 			onerror : function() {
-				console.log(this.error);
+				//		console.log(this.error);
 			},
 			onload : function() {
-				Ti.App.Properties.setString(pdffile.md5, pdffile.name);
+				Ti.App.Properties.setString(pdffile.md5, pdffile.title);
+				_argc.onload(pdffile.title);
 			},
 			timeout : 60000
 		});
@@ -140,18 +146,16 @@ exports.mirrorAll = function(_argc) {
 		xhr.send(null);
 	}
 
-
-	_argc.onstart();
 	var xhr = Ti.Network.createHTTPClient({
 		username : Ti.App.Properties.getString('credentials').split(':')[0],
 		password : Ti.App.Properties.getString('credentials').split(':')[1],
 		onload : function() {
-			console.log(xhr.allResponseHeaders);
 			var list = JSON.parse(this.responseText);
 			for (var i = 0; i < list.length; i++) {
 				var filehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, list[i].name);
-				if (filehandle.exists() && !Ti.App.Properties.hasProperty(list[i].md5))
+				if (filehandle.exists() && Ti.App.Properties.hasProperty(list[i].md5))
 					continue;
+				console.log(list[i]);
 				mirrorPDF(list[i]);
 			}
 		},
