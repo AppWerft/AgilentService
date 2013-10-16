@@ -1,3 +1,4 @@
+const INLINE = true;
 exports.create = function() {
 	var actionbutton = Ti.UI.createButton({
 		width : 50,
@@ -13,16 +14,27 @@ exports.create = function() {
 		backgroundColor : 'silver',
 		barColor : '#000'
 	});
+	var closer = Ti.UI.createButton({
+		title : 'Schliessen',
+		width : 80,
+		height : 25
+	});
+	closer.addEventListener('click', function() {
+		pdfcontroler && pdfcontroler.close();
+	});
 	var navGroup = Ti.UI.iPhone.createNavigationGroup({
 		window : masterwindow,
 	});
-	var main = Ti.UI.createWindow();
-	main.add(navGroup);
-	main.open();
+	var mainWindow = Ti.UI.createWindow({
+		leftNavButton : closer
+	});
+	mainWindow.add(navGroup);
+	mainWindow.open();
+	var pdfcontroler;
 	require('module/pdf.model').getClientNumber({
 		onsuccess : function() {
 			var pspdfkit = require('com.pspdfkit');
-			var pdfcontroler;
+
 			require('module/mirror').all();
 			function updateList() {
 				require('module/pdf.model').getList(function(_lections) {
@@ -34,34 +46,62 @@ exports.create = function() {
 					}
 				});
 			}
+
 			function openPDF(_modus) {
 				require('module/pdf.model').getPDF({
 					modus : _modus,
 					onload : function(_pdf) {
-						pdfcontroler = pspdfkit.showPDFAnimated(_pdf.pdfpath, 4, {
+						var options = {
 							lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
+							thumbnailBarMode : 0,
 							pageMode : 0, // PSPDFPageModeSingle
+							top : 40,
 							pageTransition : 2, // PSPDFPageCurlTransition
 							linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
-							thumbnailSize : [200, 200], // Allows custom thumbnail size.
-							leftBarButtonItems : ["closeButtonItem"],
-							top : 50
-						}, {
-						});
-						pdfcontroler.scrollToPage(_pdf.page, true);
-						pdfcontroler.addEventListener('didShowPage', function(_event) {
-							var path = pdfcontroler.documentPath.split('/');
-							var value = 'pspdfkit://localhost/' + path[path.length - 1] + '#page=' + _event.page;
-							Ti.App.Properties.setString('recent', value);
-						});
-						pdfcontroler.addEventListener('didCloseController', function() {
-							dialog.show({
-								view : actionbutton
+							leftBarButtonItems : [],
+							rightBarButtonItems : [],
+						};
+						if (INLINE == true) {
+							pdfcontroler = pspdfkit.createView({
+								filename : _pdf.pdfpath,
+								top : 50,
+								options : options,
+								documentOptions : {
+									title : ''
+								}
 							});
-						});
+							mainWindow.add(pdfcontroler);
+							pdfcontroler.scrollToPage(_pdf.page, true);
+							pdfcontroler.addEventListener('didShowPage', function(_event) {
+								var path = _pdf.pdfpath;
+								var value = 'pspdfkit://localhost/' + path[path.length - 1] + '#page=' + _event.page;
+								Ti.App.Properties.setString('recent', value);
+							});
+							pdfcontroler.addEventListener('didCloseController', function() {
+								mainWindow.remove(pdfcontroler);
+								dialog.show({
+									view : actionbutton
+								});
+							});
+						} else {
+							pdfcontroler = pspdfkit.showPDFAnimated(_pdf.pdfpath, 4, options, {
+							});
+							pdfcontroler.scrollToPage(_pdf.page, true);
+							pdfcontroler.addEventListener('didShowPage', function(_event) {
+								var path = pdfcontroler.documentPath.split('/');
+								var value = 'pspdfkit://localhost/' + path[path.length - 1] + '#page=' + _event.page;
+								Ti.App.Properties.setString('recent', value);
+							});
+							pdfcontroler.addEventListener('didCloseController', function() {
+								dialog.show({
+									view : actionbutton
+								});
+							});
+						}
 					}
 				});
 			}
+
 			var opts = {
 				cancel : 2,
 				destructive : 0,

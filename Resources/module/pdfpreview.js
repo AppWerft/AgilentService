@@ -15,7 +15,7 @@ exports.create = function(pdf) {
 		borderRadius : 8,
 		parent : self,
 		image : 'appicon.png'
-	})
+	});
 	self.add(self.preview);
 	self.pb = Ti.UI.createProgressBar({
 		bottom : 10,

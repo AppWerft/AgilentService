@@ -23,16 +23,20 @@ exports.create = function() {
 			return;
 		var url = item.url;
 		require('module/pdf.model').get(url, item.pb, function(_pdf) {
-			Ti.App.PSPDFKIT.showPDFAnimated(_pdf.pdfpath, 4, {
+			Ti.App.PSPDFKIT.showPDF(_pdf.pdfpath, 4, {
+				thumbnailBarMode : false,
+				top : 50, //  !!!!
+				title : null,
+				toolbarEnabled : false,
+				navigationBarHidden : true,
 				lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
-				pageMode : 0, // PSPDFPageModeSingle
+				pageMode : 2, // PSPDFPageModeSingle
 				pageTransition : 2, // PSPDFPageCurlTransition
 				linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
-				thumbnailSize : [200, 200], // Allows custom thumbnail size.
 				leftBarButtonItems : ["closeButtonItem"]
 				//	additionalBarButtonItems : ["openInButtonItem", "emailButtonItem", "printButtonItem", "searchButtonItem", "outlineButtonItem"]
 			}, {
-				//title : "Titel der Lektion",
+				title : null,
 			});
 		});
 	});

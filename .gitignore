@@ -3,4 +3,4 @@ build.log
 tmp
 ._*
 .DS_Store
-tiapp*
+tiapp.xml
