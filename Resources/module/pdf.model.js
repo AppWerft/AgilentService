@@ -11,93 +11,14 @@ exports.getPDF = function(_args) {
 	var page = url[3];
 	var filehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, filename);
 	if (filehandle.exists()) {
+		console.log(filehandle.nativePath);
 		_args.onload({
 			pdfpath : filehandle.nativePath,
 			title : 'Übersicht',
-			page : page,
-			preview : Ti.App.PSPDFKIT.imageForDocument(filehandle.nativePath, 0, 1)
+			page : page
+			//preview : Ti.App.PSPDFKIT.imageForDocument(filehandle.nativePath, 0, 1)
 		});
-	} else {
-		var xhr = Ti.Network.createHTTPClient({
-			onload : function() {
-				_args.onload({
-					pdfpath : filehandle.nativePath,
-					title : 'Übersicht',
-					page : page,
-					preview : Ti.App.PSPDFKIT.imageForDocument(filehandle.nativePath, 0, 1)
-				});
-			}
-		});
-		xhr.open('GET', Ti.App.Properties.getString('baseurl') + filename);
-		xhr.file = filehandle;
-		xhr.send();
-	}
-};
-
-exports.getPdfDocument = function(_url, _pb, _callback) {
-	var parts = _url.split('/');
-	var fileName = parts[parts.length - 1];
-	var title = fileName.replace(/\.pdf/i, '');
-	if (_url.match(/^http/)) {
-		var g = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE);
-		if (!g.exists()) {
-			g.createDirectory();
-		};
-		var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, fileName);
-		_pb.show();
-		if (f.exists()) {
-			try {
-				//PSPdfKit.imageForDocument(f.nativePath, 0, 1);
-				var res = {
-					pdfpath : f.nativePath,
-					title : title,
-					preview : Ti.App.PSPDFKIT.imageForDocument(f.nativePath, 0, 1)
-				};
-				_callback(res);
-			} catch(E) {
-				alert(E);
-			}
-			_pb.hide();
-		} else {
-			var xhr = Titanium.Network.createHTTPClient({
-				ondatastream : function(_e) {
-					_pb.setValue(_e.progress);
-				},
-				onerror : function() {
-					_pb.hide();
-				},
-				onload : function() {
-					_pb.hide();
-					if (this.status == 200) {
-						_callback({
-							title : title,
-							pdfpath : f.nativePath,
-							preview : Ti.App.PSPDFKIT.imageForDocument(f.nativePath, 0, 1)
-						});
-					}
-				},
-				timeout : 60000
-			});
-			xhr.open('GET', _url);
-			xhr.file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, fileName);
-			xhr.send(null);
-		}
-	} else {
-		var f = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, _url);
-		if (f.exists()) {
-			try {
-				//PSPdfKit.imageForDocument(f.nativePath, 0, 1);
-				var res = {
-					pdfpath : f.nativePath,
-					title : title,
-					preview : Ti.App.PSPDFKIT.imageForDocument(f.nativePath, 0, 1)
-				};
-				_callback(res);
-			} catch(E) {
-				alert(E);
-			}
-		}
-	}
+	} 
 };
 
 exports.getClientNumber = function(_args) {
@@ -120,50 +41,55 @@ exports.getClientNumber = function(_args) {
 };
 
 exports.mirrorAll = function(_args) {
-	var mirrorPDF = function(pdffile) {
-		pdffile.title = pdffile.name.replace(/\.pdf/i, '');
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, pdffile.name);
-		console.log('path: ' + file.nativePath);
+	var mirrorFile = function(_file) {
+		var filename = _file.name;
+		var md5 = _file.md5;
 		var g = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE);
 		if (!g.exists()) {
 			g.createDirectory();
 		};
-		_args.onstart(pdffile.title);
+		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, filename);
+		console.log('path: ' + file.nativePath);
+		_args.onstart(filename);
 		var xhr = Ti.Network.createHTTPClient({
 			username : Ti.App.Properties.getString('credentials').split(':')[0],
 			password : Ti.App.Properties.getString('credentials').split(':')[1],
 			ondatastream : function(_e) {
 				_args.onprogress({
-					name : pdffile.title,
+					name : filename,
 					progress : _e.progress
 				});
 			},
 			onerror : function(_e) {
-				console.log('Error: ' + _e.error + '  ' + pdffile.title);
-				Ti.App.Properties.setString(pdffile.md5, pdffile.title);
-				_args.onload(pdffile.title);
+				console.log('Error: ' + _e.error + '  ' + filename);
+				_args.onload(filename);
 			},
 			onload : function() {
-				console.log('Info: ' + this.status + ' ' + pdffile.title + ' loaded.');
-				Ti.App.Properties.setString(pdffile.md5, pdffile.title);
-				_args.onload(pdffile.title);
+				console.log('Info: ' + this.status + ' ' + filename + ' loaded.');
+				Ti.App.Properties.setString(md5, filename);
+				_args.onload(filename);
 			},
 			timeout : 60000
 		});
-		xhr.open('GET', Ti.App.Properties.getString('baseurl') + pdffile.name, true);
+		var url = Ti.App.Properties.getString('baseurl') + 'DATA/'+filename;
+		console.log(url);
+		xhr.open('GET', url, true);
 		xhr.file = file, xhr.send(null);
 	};
 	var xhr = Ti.Network.createHTTPClient({
-		username : Ti.App.Properties.getString('credentials').split(':')[0],
-		password : Ti.App.Properties.getString('credentials').split(':')[1],
 		onload : function() {
-			var list = JSON.parse(this.responseText);
+			console.log(this.responseText);
+			try {
+				var list = JSON.parse(this.responseText);
+			} catch(E) {
+				return;
+			}
 			for (var i = 0; i < list.length; i++) {
+				console.log('Info: file to mirror: ' + list[i].name);
 				var filehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CACHE, list[i].name);
 				if (filehandle.exists() && Ti.App.Properties.hasProperty(list[i].md5))
 					continue;
-				console.log(list[i]);
-				mirrorPDF(list[i]);
+				mirrorFile(list[i]);
 			}
 		},
 		onerror : function() {
@@ -172,5 +98,4 @@ exports.mirrorAll = function(_args) {
 	});
 	xhr.open('GET', Ti.App.Properties.getString('baseurl') + '.getallpdfs.php');
 	xhr.send();
-
 };

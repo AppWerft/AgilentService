@@ -6,7 +6,6 @@ exports.create = function() {
 		backgroundImage : 'appicon.png',
 		borderRadius : 8
 	});
-
 	var masterwindow = Ti.UI.createWindow({
 		backgroundImage : '/assets/bg.jpg',
 		title : 'iLabDoc',
@@ -33,17 +32,16 @@ exports.create = function() {
 	var pdfcontroler;
 	require('module/pdf.model').getClientNumber({
 		onsuccess : function() {
-			var pspdfkit = require('com.pspdfkit');
-
+			//var pspdfkit = require('com.pspdfkit');
 			require('module/mirror').all();
 			function updateList() {
 				require('module/pdf.model').getList(function(_lections) {
 					if (!_lections)
 						return;
 					masterview.removeAllChildren();
-					for (var i = 0; i < _lections.length; i++) {
-						masterview.add(require('module/pdfpreview').create(_lections[i]));
-					}
+					//for (var i = 0; i < _lections.length; i++) {
+					//	masterview.add(require('module/pdfpreview').create(_lections[i]));
+					//}
 				});
 			}
 
@@ -56,13 +54,14 @@ exports.create = function() {
 							thumbnailBarMode : 0,
 							pageMode : 0, // PSPDFPageModeSingle
 							top : 40,
+							toolbarEnabled : false,
 							pageTransition : 2, // PSPDFPageCurlTransition
 							linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
 							leftBarButtonItems : [],
 							rightBarButtonItems : [],
 						};
 						if (INLINE == true) {
-							pdfcontroler = pspdfkit.createView({
+							pdfcontroler = Ti.App.PSPDFKIT.createView({
 								filename : _pdf.pdfpath,
 								top : 50,
 								options : options,
@@ -118,7 +117,7 @@ exports.create = function() {
 					case 1:
 						openPDF('recent');
 						break;
-					case 2:
+					/*case 2:
 						var OpenTokModul = require('module/opentok_view');
 						var OpenTokContainer = Ti.UI.iPad.createPopover({
 							width : 480,
@@ -136,7 +135,7 @@ exports.create = function() {
 							OpenTokContainer.remove(opentokview);
 							OpenTok = null;
 						});
-						break;
+						break;*/	
 				}
 			});
 			actionbutton.addEventListener('click', function() {
