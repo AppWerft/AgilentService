@@ -7,16 +7,6 @@
 <key>PreferenceSpecifiers</key>
 <array>
 
-
-<dict>
-<key>Type</key>
-<string>PSGroupSpecifier</string>
-<key>Title</key>
-<string>Nutzerdaten</string>
-</dict>
-
-
-
 <dict>
 <key>Type</key>
 <string>PSGroupSpecifier</string>
@@ -30,9 +20,31 @@
 <key>Title</key>
 <string>Kundennummer speichern?</string>
 <key>Key</key>
-<string>nrsaving</string>
+<string>nrcache</string>
 <key>DefaultValue</key>
 <true/>
+</dict>
+
+<dict>
+<key>Type</key>
+<string>PSToggleSwitchSpecifier</string>
+<key>Title</key>
+<string>Immer spiegeln?</string>
+<key>Key</key>
+<string>no-cache</string>
+<key>DefaultValue</key>
+<false/>
+</dict>
+
+<dict>
+<key>Type</key>
+<string>PSTextFieldSpecifier</string>
+<key>Title</key>
+<string>Data-Folder</string>
+<key>Key</key>
+<string>datafolder</string>
+<key>DefaultValue</key>
+<string>FINAL_DATA</string>
 </dict>
 
 

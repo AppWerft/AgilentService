@@ -1,4 +1,5 @@
 exports.all = function() {
+	console.log('Info: start mirror.all()');
 	var progresses = [];
 	var total = 0;
 	var progressdisplay = Ti.UI.createWindow({

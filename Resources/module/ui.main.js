@@ -1,38 +1,47 @@
 const INLINE = true;
 exports.create = function() {
+	var pdfcontroler;
 	var actionbutton = Ti.UI.createButton({
 		width : 50,
-		height : 36,
+		height : 45,
 		backgroundImage : 'appicon.png',
 		borderRadius : 8
-	});
-	var masterwindow = Ti.UI.createWindow({
-		backgroundImage : '/assets/bg.jpg',
-		title : 'iLabDoc',
-		rightNavButton : actionbutton,
-		backgroundColor : 'silver',
-		barColor : '#000'
 	});
 	var closer = Ti.UI.createButton({
 		title : 'Schliessen',
 		width : 80,
-		height : 25
+		height : 35
 	});
+
 	closer.addEventListener('click', function() {
-		pdfcontroler && pdfcontroler.close();
+		pdfcontroler && mainWindow.remove(pdfcontroler);
+		Ti.UI.iPhone.hideStatusBar();
 	});
+	var masterwindow = Ti.UI.createWindow({
+		backgroundImage : '/assets/bg.jpg',
+		title : 'EducationPackage',
+		rightNavButton : actionbutton,
+		barColor : '#ccc',
+		fullscreen : true,
+		leftNavButton : null
+	});
+	Ti.UI.iPhone.hideStatusBar();
 	var navGroup = Ti.UI.iPhone.createNavigationGroup({
 		window : masterwindow,
 	});
-	var mainWindow = Ti.UI.createWindow({
-		leftNavButton : closer
-	});
+	var mainWindow = Ti.UI.createWindow();
 	mainWindow.add(navGroup);
 	mainWindow.open();
-	var pdfcontroler;
 	require('module/pdf.model').getClientNumber({
-		onsuccess : function() {
-			//var pspdfkit = require('com.pspdfkit');
+		onsuccess : function(_backgroundURL) {
+			console.log(_backgroundURL);
+			masterwindow.add(Ti.UI.createImageView({
+				image : _backgroundURL,
+				defaultImage : '',
+				width : Ti.UI.FILL,
+				height : Ti.UI.FILL
+			}));
+			console.log('Info: getClientNumber successful');
 			require('module/mirror').all();
 			function updateList() {
 				require('module/pdf.model').getList(function(_lections) {
@@ -46,6 +55,7 @@ exports.create = function() {
 			}
 
 			function openPDF(_modus) {
+				masterwindow.leftNavButton = closer;
 				require('module/pdf.model').getPDF({
 					modus : _modus,
 					onload : function(_pdf) {
@@ -102,9 +112,9 @@ exports.create = function() {
 			}
 
 			var opts = {
-				cancel : 2,
+				cancel : 3,
 				destructive : 0,
-				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', 'Abbruch'],
+				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', '¦  Dokumente abgleichen', 'Abbruch'],
 				selectedIndex : 1,
 				title : 'Haupt-Menü'
 			};
@@ -117,25 +127,28 @@ exports.create = function() {
 					case 1:
 						openPDF('recent');
 						break;
+					case 2:
+						require('module/mirror').all();
+						break;
 					/*case 2:
-						var OpenTokModul = require('module/opentok_view');
-						var OpenTokContainer = Ti.UI.iPad.createPopover({
-							width : 480,
-							height : 540,
-							title : 'Videokonferenz',
-						});
-						OpenTokContainer.show({
-							view : actionbutton
-						});
-						var OpenTok = new OpenTokModul();
-						var opentokview = OpenTok.getView();
-						OpenTokContainer.add(opentokview);
-						OpenTokContainer.addEventListener('hide', function() {
-							OpenTok.finishSession();
-							OpenTokContainer.remove(opentokview);
-							OpenTok = null;
-						});
-						break;*/	
+					 var OpenTokModul = require('module/opentok_view');
+					 var OpenTokContainer = Ti.UI.iPad.createPopover({
+					 width : 480,
+					 height : 540,
+					 title : 'Videokonferenz',
+					 });
+					 OpenTokContainer.show({
+					 view : actionbutton
+					 });
+					 var OpenTok = new OpenTokModul();
+					 var opentokview = OpenTok.getView();
+					 OpenTokContainer.add(opentokview);
+					 OpenTokContainer.addEventListener('hide', function() {
+					 OpenTok.finishSession();
+					 OpenTokContainer.remove(opentokview);
+					 OpenTok = null;
+					 });
+					 break;*/
 				}
 			});
 			actionbutton.addEventListener('click', function() {
@@ -146,5 +159,5 @@ exports.create = function() {
 			actionbutton.fireEvent('click');
 		}
 	});
-	Ti.App.addEventListener('resume', require('module/mirror').all());
+	//Ti.App.addEventListener('resume', require('module/mirror').all());
 };

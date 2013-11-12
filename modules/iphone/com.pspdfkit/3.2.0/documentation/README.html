@@ -1,0 +1,246 @@
+<h1>PSPDFKit Appcelerator Titanium Module</h1>
+<p><strong> PSPDFKit needs Xcode 4.6 to compile and works with iOS 5.0 upwards. </strong>*</p>
+<h2>REGISTER YOUR MODULE</h2>
+<p>Register your module with your application by editing <code>tiapp.xml</code> and adding your module.
+Example:</p>
+<pre><code>&lt;modules&gt;
+    &lt;module&gt;com.pspdfkit.source&lt;/module&gt;
+&lt;/modules&gt;
+</code></pre>
+<p>To set the minimum iOS version, edit tiapp.xml and add:</p>
+<pre><code>&lt;ios&gt;
+    &lt;min-ios-ver&gt;5.0&lt;/min-ios-ver&gt;
+&lt;/ios&gt;
+</code></pre>
+<p>When you run your project, the compiler will know automatically compile in your module
+dependencies and copy appropriate image assets into the application.</p>
+<h2>USING YOUR MODULE IN CODE</h2>
+<p>To use your module in code, you will need to require it.
+If you have purchased the source-version, use com.pspdfkit.source, else just com.pspdfkit</p>
+<p>For example,</p>
+<pre><code>var pspdfkit = require('com.pspdfkit');
+</code></pre>
+<h1>API REFERENCE</h1>
+<hr />
+<p>The following is an list of available methods exposed to the Titanium javascript interface. You need to create an instance of the PSPDFKit, by either using the showPDFAnimated or createView.<br />
+</p>
+<h3>showPDFAnimated</h3>
+<p>Opens an instance of the PSPDFKit in a modal window. See see http://pspdfkit.com/documentation/Classes/PSPDFViewController.html for more information on which arguments are available.<br />
+</p>
+<pre><code>var pdfController = pspdfkit.showPDFAnimated('PSPDFKit.pdf');
+</code></pre>
+<h3>createView</h3>
+<p>creates a TiUIView that contains the PSPDFKit instance. See see http://pspdfkit.com/documentation/Classes/PSPDFViewController.html for more information on which arguments are available.<br />
+</p>
+<pre><code>var pdfController = pspdfkit.createView({
+    filename : 'PSPDFKit.pdf',
+    options : {
+        pageMode : 0,
+        toolbarEnabled : true,
+    }
+});
+</code></pre>
+<h2>Properties</h2>
+<hr />
+<h3>documentPath</h3>
+<p>Returns the documentPath.<br />
+</p>
+<pre><code>pdfController.documentPath;
+</code></pre>
+<h3>page</h3>
+<p>Current page.<br />
+</p>
+<pre><code>pdfController.page;
+</code></pre>
+<h3>totalPages</h3>
+<p>Returns total pages count.<br />
+</p>
+<pre><code>pdfController.totalPages;
+</code></pre>
+<h3>currentInterfaceOrientation</h3>
+<p>Returns the current interface orientation.<br />
+</p>
+<pre><code>pdfController.currentInterfaceOrientation;
+</code></pre>
+<h3>lockedInterfaceOrientation</h3>
+<p>Returns the locked interface orientation.<br />
+</p>
+<pre><code>pdfController.lockedInterfaceOrientation;
+</code></pre>
+<h2>Property setters</h2>
+<h3>setViewMode</h3>
+<p>Change view mode argument 1 = integer, argument 2 = animated. (optional, defaults to true)  <br />
+</p>
+<pre><code>pdfController.setViewMode(1, false);
+</code></pre>
+<h3>setLinkAnnotationBorderColor</h3>
+<p>Exposes a helper to change link annotation color. Set to change.<br />
+</p>
+<pre><code>pdfController.setLinkAnnotationBorderColor("#33FF0000");
+</code></pre>
+<h3>setLinkAnnotationHighlightColor</h3>
+<p>Exposes a helper to change link annotation highlight color. Set to change.<br />
+</p>
+<pre><code>pdfController.setLinkAnnotationHighlightColor("#99FF0000");
+</code></pre>
+<h3>setEditableAnnotationTypes</h3>
+<p>Set list of editable annotation types.<br />
+</p>
+<pre><code>pdfController.setEditableAnnotationTypes(args);
+</code></pre>
+<h3>setThumbnailFilterOptions</h3>
+<p>Exposes helper to set thumbnailController.filterOptions.<br />
+</p>
+<pre><code>pdfController.setThumbnailFilterOptions(["All", "Bookmarks"]);
+</code></pre>
+<h3>setOutlineControllerFilterOptions</h3>
+<p>Exposes helper to set outlineBarButtonItem.availableControllerOptions<br />
+</p>
+<pre><code>pdfController.setOutlineControllerFilterOptions(["Outline"]);
+</code></pre>
+<h3>setAllowedMenuActions</h3>
+<p>Document's menu actions.<br />
+</p>
+<pre><code>pdfController.setAllowedMenuActions(args);
+</code></pre>
+<h3>setScrollingEnabled</h3>
+<p>Expose the scrollingEnabled property<br />
+</p>
+<pre><code>pdfController.setScrollingEnabled(true);
+</code></pre>
+<h3>setLockedInterfaceOrientation</h3>
+<p>UIDeviceOrientationPortrait = 1<br />
+UIDeviceOrientationPortraitUpsideDown = 2<br />
+UIDeviceOrientationLandscapeLeft = 3<br />
+UIDeviceOrientationLandscapeRight = 4<br />
+-1 will reset the lock.  <br />
+</p>
+<pre><code>pdfController.setLockedInterfaceOrientation(2);
+</code></pre>
+<h3>setAnnotationSaveMode</h3>
+<p>PSPDFDocument's annotationSaveMode property.<br />
+PSPDFAnnotationSaveModeDisabled = 0<br />
+PSPDFAnnotationSaveModeExternalFile = 1, <br />
+PSPDFAnnotationSaveModeEmbedded = 2,<br />
+PSPDFAnnotationSaveModeEmbeddedWithExternalFileAsFallback = 3 // Default.<br />
+</p>
+<pre><code>pdfController.setAnnotationSaveMode(2);
+</code></pre>
+<h2>Methods</h2>
+<hr />
+<h3>close</h3>
+<p>Close the pdf controller. (argument 1 = animated)<br />
+</p>
+<pre><code>pdfController.close(true);
+</code></pre>
+<h3>hidePopover</h3>
+<p>Hide any visible popover. arg: animated true/false.</p>
+<pre><code>pdfController.hidePopover(true);
+</code></pre>
+<h3>scrollToPage</h3>
+<p>Scroll to a specific page. Argument 1 = page number, argument 2 = animated. (optional, defaults to true)<br />
+</p>
+<pre><code>pdfController.scrollToPage(2, true);
+</code></pre>
+<h3>searchForString</h3>
+<p>Opens the PSPDFSearchViewController with the searchString. Argument 1 = integer, argument 2 = animated. (optional, defaults to YES)<br />
+</p>
+<pre><code>pdfController.searchForString("hello", true);
+</code></pre>
+<h3>bookmarkPage</h3>
+<p>Bookmark the current page. <br />
+</p>
+<pre><code>pdfController.bookmarkPage();
+</code></pre>
+<h3>saveAnnotations</h3>
+<p>Save changed annotations.</p>
+<pre><code>pdfController.saveAnnotations();
+</code></pre>
+<h3>showOutlineView</h3>
+<p>Opens the PSPDFOutlineViewController. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showOutlineView(myBtn);
+</code></pre>
+<h3>showSearchView</h3>
+<p>Opens the PSPDFSearchViewController. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showSearchView(myBtn);
+</code></pre>
+<h3>showBrightnessView</h3>
+<p>Opens the PSPDFBrightnessViewController. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showBrightnessView(myBtn);
+</code></pre>
+<h3>showPrintView</h3>
+<p>Opens the UIPrintInteractionController. Argument 1 = view/button action sender   <br />
+</p>
+<pre><code>pdfController.showPrintView(myBtn);
+</code></pre>
+<h3>showEmailView</h3>
+<p>Opens the MFMailComposeViewController. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showEmailView(myBtn);
+</code></pre>
+<h3>showAnnotationView</h3>
+<p>Opens the PSPDFAnnotationToolbar. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showAnnotationView(myBtn);
+</code></pre>
+<h3>showOpenInView</h3>
+<p>Opens the UIDocumentInteractionController. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showOpenInView(myBtn);
+</code></pre>
+<h3>showActivityView</h3>
+<p>Opens the UIActivityViewController. Argument 1 = view/button action sender  <br />
+</p>
+<pre><code>pdfController.showActivityView(myBtn);
+</code></pre>
+<h2>Events</h2>
+<hr />
+<h3>didShowPage</h3>
+<p>Example how to register for the didShowPage event</p>
+<pre><code>pdfController.addEventListener("didShowPage", function(e) {
+    Ti.API.log('didShowPage: ' + e.page);
+});
+</code></pre>
+<h3>willCloseController</h3>
+<p>Event that listens when a viewController will be closed</p>
+<pre><code>pdfController.addEventListener('willCloseController', function(e) {
+    Ti.API.log('(modal) willCloseController... we\'re on the edge of being killed.');
+});
+</code></pre>
+<h3>didCloseController</h3>
+<p>Add event after view controller has been closed</p>
+<pre><code>pdfController.addEventListener('didCloseController', function(e) {
+    alert("PSPDFKit ViewController closed.");
+});
+</code></pre>
+<h3>didTapOnAnnotation</h3>
+<p>Add event listener for annotations.</p>
+<pre><code>pdfController.addEventListener('didTapOnAnnotation', function(dict) {
+    Ti.API.log("didTapOnAnnotation " + dict.siteLinkTarget);
+});
+</code></pre>
+<h3>willShowHUD</h3>
+<p>HUD will be displayed.</p>
+<pre><code>pdfController.addEventListener('willShowHUD', function(dict) {
+    // show your custom HUD
+});
+</code></pre>
+<h3>willHideHUD</h3>
+<p>HUD will be hidden.</p>
+<pre><code>pdfController.addEventListener('willHideHUD', function(dict) {
+    // hide your custom HUD
+});
+</code></pre>
+<h2>Events callbacks</h2>
+<hr />
+<h3>setDidTapOnAnnotationCallback</h3>
+<p>Register a callback for the didTapOnAnnotation event. Return true if you manually use the annotation, else false.<br />
+</p>
+<pre><code>pdfController.setDidTapOnAnnotationCallback(function(dict) {
+    Ti.API.log(dict);
+    return false; // let PSPDFKit handle it
+});
+</code></pre>
