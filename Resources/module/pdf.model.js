@@ -39,7 +39,7 @@ exports.getPDF = function(_args) {
 exports.getClientBG = function() {
 	return Ti.App.Properties.getString('baseurl') + 'FINAL_DATA/KUNDENLOGOS/' + Ti.App.Properties.getString('clientId') + '.jpg';
 };
-
+   
 exports.getClientNumber = function(_args) {
 	console.log(Ti.App.Properties.getBool('no-cache'));
 	console.log(typeof Ti.App.Properties.getBool('no-cache'));
