@@ -39,22 +39,13 @@ exports.getPDF = function(_args) {
 exports.getClientBG = function() {
 	return Ti.App.Properties.getString('baseurl') + 'FINAL_DATA/KUNDENLOGOS/' + Ti.App.Properties.getString('clientId') + '.jpg';
 };
-   
-exports.getClientNumber = function(_args) {
-	console.log(Ti.App.Properties.getBool('no-cache'));
-	console.log(typeof Ti.App.Properties.getBool('no-cache'));
-	console.log(Ti.App.Properties.getBool('cachenr'));
-	console.log(typeof Ti.App.Properties.getBool('cachenr'));
-	console.log(Ti.App.Properties.getBool('datafolder'));
-	console.log(typeof Ti.App.Properties.getBool('datafolder'));
-	var props = Ti.App.Properties.listProperties();
 
-for (var i=0, ilen=props.length; i<ilen; i++){
-    var value = Ti.App.Properties.getString(props[i]);
-    Ti.API.info(props[i] + ' = ' + value);
-}
-	
-	
+exports.getClientNumber = function(_args) {
+	var props = Ti.App.Properties.listProperties();
+	for (var i = 0, ilen = props.length; i < ilen; i++) {
+		var value = Ti.App.Properties.getString(props[i]);
+		Ti.API.info(props[i] + ' = ' + value);
+	}
 	if (Ti.App.Properties.getBool('nrsaving') == false)
 		Ti.App.Properties.removeProperty('clientId');
 	console.log('Info: start getClientNumber');
@@ -108,7 +99,7 @@ exports.mirrorAll = function(_args) {
 			},
 			timeout : 60000
 		});
-		var url = Ti.App.Properties.getString('baseurl') + Ti.App.Properties.getString('datafolder','FINAL_DATA') + '/' + filename;
+		var url = Ti.App.Properties.getString('baseurl') + Ti.App.Properties.getString('datafolder', 'FINAL_DATA') + '/' + filename;
 		xhr.open('GET', url, true);
 		console.log(url);
 		xhr.file = file, xhr.send(null);
