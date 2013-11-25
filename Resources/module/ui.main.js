@@ -8,7 +8,7 @@ exports.create = function() {
 		borderRadius : 8
 	});
 	var closer = Ti.UI.createButton({
-		title : 'Schliessen',
+		title : 'Home',
 		width : 80,
 		height : 35
 	});
@@ -114,7 +114,7 @@ exports.create = function() {
 			var opts = {
 				cancel : 3,
 				destructive : 0,
-				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', '¦  Dokumente abgleichen', 'Abbruch'],
+				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', '¦  Datenabgleich','Abbruch'],
 				selectedIndex : 1,
 				title : 'Haupt-Menü'
 			};
@@ -159,5 +159,5 @@ exports.create = function() {
 			actionbutton.fireEvent('click');
 		}
 	});
-	//Ti.App.addEventListener('resume', require('module/mirror').all());
+	Ti.App.addEventListener('resume', require('module/mirror').all());
 };
