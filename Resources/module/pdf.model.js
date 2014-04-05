@@ -1,6 +1,6 @@
 if (!Ti.App.Properties.hasProperty('recent'))
 	Ti.App.Properties.setString('recent', 'pspdfkit://localhost/StartIndex.pdf');
-
+var CLEANING_OF_UNUSED_ASSETS = true;
 Array.prototype.in_array = function(p_val) {
 	for (var i = 0, l = this.length; i < l; i++) {
 		if (this[i] == p_val) {
@@ -27,12 +27,12 @@ exports.init = function() {
 	if (!savingClientId)
 		Ti.App.Properties.removeProperty('clientId');
 	if (forcedImport) {
-		var localfiles = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing();
-		for (var i = 0; i < localfiles.length; i++) {
-			if (!localfiles[i].match(/\.log$/)) {
-				var todeletefilehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, localfiles[i]);
+		var localfilelist = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing();
+		for (var i = 0; i < localfilelist.length; i++) {
+			if (!localfilelist[i].match(/\.log$/)) {
+				var todeletefilehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, localfilelist[i]);
 				todeletefilehandle.deleteFile();
-				console.log('Info: ' + localfiles[i] + ' deleted!');
+				console.log('Info: ' + localfilelist[i] + ' deleted!');
 			}
 		}
 	}
@@ -61,7 +61,7 @@ exports.getPDF = function(_args) {
 
 var getClientBG = function() {
 	var bgurl = Ti.App.Properties.getString('baseurl') + Ti.App.Properties.getString('datafolder', 'FINAL_DATA') + '/KUNDENLOGOS/' + Ti.App.Properties.getString('clientId') + '.jpg';
-	return bgurl
+	return bgurl;
 };
 
 exports.getClientNumber = function(_args) {
@@ -88,14 +88,14 @@ exports.getClientNumber = function(_args) {
 };
 
 exports.mirrorAll = function(_args) {
-
 	console.log('Info: start mirroring');
 	var mirrorFile = function(_file) {
 		var filename = _file.name;
 		var md5 = _file.md5;
 		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filename);
-		console.log('path: ' + file.nativePath);
+		console.log('Info: path of cached file ' + file.nativePath);
 		_args.onstart(filename);
+		// creating of progressbar in UI
 		var xhr = Ti.Network.createHTTPClient({
 			timeout : 60000,
 			username : baseurl.userInfo().split(':')[0],
@@ -112,54 +112,65 @@ exports.mirrorAll = function(_args) {
 			},
 			onload : function() {
 				console.log('Info: ' + this.status + ' ' + filename + ' loaded.');
+				console.log(Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing());
 				Ti.App.Properties.setString(md5, filename);
 				_args.onload(filename);
-			},
-			timeout : 60000
+				// deleting of progressbar in UI
+			}
 		});
 		var url = Ti.App.Properties.getString('baseurl') + Ti.App.Properties.getString('datafolder', 'FINAL_DATA') + '/' + filename;
 		xhr.open('GET', url, true);
-		console.log(url);
 		xhr.file = file, xhr.send(null);
 	};
 	if (Ti.Network.online == false) {
 		alert('Das Gerät hat zur Zeit kein Internetzugang, daher ist ein Abgleich nicht möglich');
 		return;
 	}
+	console.log('START :__________');
+	console.log(Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing());
+
 	var xhr = Ti.Network.createHTTPClient({
 		username : baseurl.userInfo().split(':')[0],
 		password : baseurl.userInfo().split(':')[1],
 		onload : function() {
-			console.log(this.responseText);
+			console.log('Info: remotefilelist successfull loaded. ================');
 			try {
-				var list = JSON.parse(this.responseText);
+				var remotefilelist = JSON.parse(this.responseText);
 			} catch(E) {
-				console.log('Error: ' + E);
 				return;
 			};
 			// now removing of obsolete files:
 			console.log('Info: start of mirror cleaning ....');
-			var localfiles = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing();
-			for (var i = 0; i < localfiles.length; i++) {
-				if (list.in_filearray(localfiles[i]) == false) {
-					if (!localfiles[i].match(/\.log$/)) {
-						var todeletefilehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, localfiles[i]);
-						todeletefilehandle.deleteFile();
-						console.log('Info: ' + localfiles[i] + ' deleted!');
+			console.log('START :__________');
+			console.log(Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing());
+
+			var localfilelist = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing();
+			console.log('============================================');
+			if (CLEANING_OF_UNUSED_ASSETS == true) {
+				for (var i = 0; i < localfilelist.length; i++) {
+					if (remotefilelist.in_filearray(localfilelist[i]) == false) {
+						if (!localfilelist[i].match(/\.log$/)) {
+							var todeletefilehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, localfilelist[i]);
+							todeletefilehandle.deleteFile();
+							console.log('Info: ' + localfilelist[i] + ' deleted!');
+						}
 					}
 				}
 			}
-			var counter = list.length;
-			console.log('Info: end of mirror cleaning. Now we have to mirror ' + counter + ' items');
+			var counter = remotefilelist.length;
+			console.log('Info: end of mirror cleaning. Now we *try* to mirror ' + counter + ' items');
+			console.log('START :__________');
+			console.log(Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory).getDirectoryListing());
+
 			for (var i = 0; i < counter; i++) {
-				var filehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, list[i].name);
-				if (filehandle.exists() && Ti.App.Properties.hasProperty(list[i].md5)) {
-				//	counter--;
-					console.log('Info: ' + list[i].name + ' is actual ' + counter);
+				var filehandle = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, remotefilelist[i].name);
+				if (filehandle.exists() && Ti.App.Properties.hasProperty(remotefilelist[i].md5)) {
+					//	counter--;
+					console.log('Info: ' + remotefilelist[i].name + ' is actual ' + counter);
 					continue;
 				} else {
-					console.log('Info: ' + list[i].name + ' is to mirror ');
-					mirrorFile(list[i]);
+					console.log('Info: ' + remotefilelist[i].name + ' is to mirror ');
+					mirrorFile(remotefilelist[i]);
 				}
 			}
 			console.log('Info: end of list ========= ');

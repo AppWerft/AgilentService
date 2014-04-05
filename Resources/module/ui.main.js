@@ -1,41 +1,37 @@
 const INLINE = true;
+const HOMEBUTTON = false;
 exports.create = function() {
 	var pdfcontroler;
-	var actionbutton = Ti.UI.createButton({
-		width : 50,
-		height : 45,
-		backgroundImage : 'appicon.png',
-		borderRadius : 8
+	var menubutton = Ti.UI.createButton({
+		title : 'Menü'
 	});
-	var closer = Ti.UI.createButton({
+	var self = Ti.UI.iOS.createNavigationWindow({
+		window : Ti.UI.createWindow({
+			backgroundImage : '/assets/bg.jpg',
+			title : '',
+			width : Ti.UI.FILL,
+			height : Ti.UI.FILL,
+			rightNavButton : menubutton,
+			barColor : '#555',
+			fullscreen : false,
+			leftNavButton : null
+		})
+	});
+	self.open();
+
+	var homebutton = Ti.UI.createButton({
 		title : 'Home',
 		width : 80,
 		height : 35
 	});
+	if (HOMEBUTTON)
+		homebutton.addEventListener('click', function() {
+			pdfcontroler && self.getWindow().remove(pdfcontroler);
+		});
 
-	closer.addEventListener('click', function() {
-		pdfcontroler && mainWindow.remove(pdfcontroler);
-		Ti.UI.iPhone.hideStatusBar();
-	});
-	var masterwindow = Ti.UI.createWindow({
-		backgroundImage : '/assets/bg.jpg',
-		title : 'EducationPackage',
-		rightNavButton : actionbutton,
-		barColor : '#ccc',
-		fullscreen : true,
-		leftNavButton : null
-	});
-	Ti.UI.iPhone.hideStatusBar();
-	var navGroup = Ti.UI.iPhone.createNavigationGroup({
-		window : masterwindow,
-	});
-	var mainWindow = Ti.UI.createWindow();
-	mainWindow.add(navGroup);
-	mainWindow.open();
 	require('module/pdf.model').getClientNumber({
 		onsuccess : function(_backgroundURL) {
-			console.log(_backgroundURL);
-			masterwindow.add(Ti.UI.createImageView({
+			self.getWindow().add(Ti.UI.createImageView({
 				image : _backgroundURL,
 				defaultImage : '',
 				width : Ti.UI.FILL,
@@ -47,15 +43,13 @@ exports.create = function() {
 				require('module/pdf.model').getList(function(_lections) {
 					if (!_lections)
 						return;
-					masterview.removeAllChildren();
-					//for (var i = 0; i < _lections.length; i++) {
-					//	masterview.add(require('module/pdfpreview').create(_lections[i]));
-					//}
+					self.getWindow().removeAllChildren();
 				});
 			}
 
 			function openPDF(_modus) {
-				masterwindow.leftNavButton = closer;
+				if (HOMEBUTTON)
+					self.getWindow().leftNavButton = homebutton;
 				require('module/pdf.model').getPDF({
 					modus : _modus,
 					onload : function(_pdf) {
@@ -63,7 +57,8 @@ exports.create = function() {
 							lockedInterfaceOrientation : 3, // lock to one interface orientation. optional.
 							thumbnailBarMode : 0,
 							pageMode : 0, // PSPDFPageModeSingle
-							top : 40,
+							top : 0,
+							pageLabelEnabled :false,
 							toolbarEnabled : false,
 							pageTransition : 2, // PSPDFPageCurlTransition
 							linkAction : 3, // PSPDFLinkActionInlineBrowser (new default)
@@ -73,13 +68,13 @@ exports.create = function() {
 						if (INLINE == true) {
 							pdfcontroler = Ti.App.PSPDFKIT.createView({
 								filename : _pdf.pdfpath,
-								top : 50,
+								top : 0,
 								options : options,
 								documentOptions : {
 									title : ''
 								}
 							});
-							mainWindow.add(pdfcontroler);
+							self.getWindow().add(pdfcontroler);
 							pdfcontroler.scrollToPage(_pdf.page, true);
 							pdfcontroler.addEventListener('didShowPage', function(_event) {
 								var path = _pdf.pdfpath;
@@ -89,7 +84,7 @@ exports.create = function() {
 							pdfcontroler.addEventListener('didCloseController', function() {
 								mainWindow.remove(pdfcontroler);
 								dialog.show({
-									view : actionbutton
+									view : menubutton
 								});
 							});
 						} else {
@@ -103,7 +98,7 @@ exports.create = function() {
 							});
 							pdfcontroler.addEventListener('didCloseController', function() {
 								dialog.show({
-									view : actionbutton
+									view : menubutton
 								});
 							});
 						}
@@ -112,11 +107,9 @@ exports.create = function() {
 			}
 
 			var opts = {
-				cancel : 3,
-				destructive : 0,
-				options : [' ►  S T A R T    ', '¦  Letztes Kapitel', '¦  Datenabgleich','Abbruch'],
-				selectedIndex : 1,
-				title : 'Haupt-Menü'
+				cancel : 2,
+				options : ['  S T A R T    ', 'Datenabgleich', 'Abbruch'],
+				title : 'Version: ' + Ti.App.getVersion()
 			};
 			var dialog = Ti.UI.createOptionDialog(opts);
 			dialog.addEventListener('click', function(_e) {
@@ -124,40 +117,19 @@ exports.create = function() {
 					case 0:
 						openPDF('start');
 						break;
+
 					case 1:
-						openPDF('recent');
-						break;
-					case 2:
 						require('module/mirror').all();
 						break;
-					/*case 2:
-					 var OpenTokModul = require('module/opentok_view');
-					 var OpenTokContainer = Ti.UI.iPad.createPopover({
-					 width : 480,
-					 height : 540,
-					 title : 'Videokonferenz',
-					 });
-					 OpenTokContainer.show({
-					 view : actionbutton
-					 });
-					 var OpenTok = new OpenTokModul();
-					 var opentokview = OpenTok.getView();
-					 OpenTokContainer.add(opentokview);
-					 OpenTokContainer.addEventListener('hide', function() {
-					 OpenTok.finishSession();
-					 OpenTokContainer.remove(opentokview);
-					 OpenTok = null;
-					 });
-					 break;*/
 				}
 			});
-			actionbutton.addEventListener('click', function() {
+			menubutton.addEventListener('click', function() {
 				dialog.show({
-					view : actionbutton
+					view : menubutton
 				});
 			});
-			actionbutton.fireEvent('click');
+			menubutton.fireEvent('click');
 		}
 	});
-	Ti.App.addEventListener('resume', require('module/mirror').all());
+	//	Ti.App.addEventListener('resume', require('module/mirror').all());
 };

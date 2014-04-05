@@ -13,6 +13,7 @@
 		}
 	});
 	require('module/pdf.model').init();
+	Ti.UI.backgroundColor='white';
 	require('module/ui.main').create();
 })();
 
